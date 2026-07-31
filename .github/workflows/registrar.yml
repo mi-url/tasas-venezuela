@@ -1,0 +1,52 @@
+name: Registrar tasas
+
+# Cada media hora. Es el ritmo al que se mueve el precio del USDT en Binance,
+# y el que ya se usaba antes. El BCV NO se consulta en cada pasada: el propio
+# script decide cuándo tocarlo, porque publica una vez al día y machacarlo 48
+# veces sería abusivo además de inútil.
+#
+# GitHub puede retrasar estas ejecuciones unos minutos cuando está cargado. Da
+# igual: esto es el historiador, no la fuente de la verdad del momento. La app
+# sabe consultar directo si hace falta.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: registrar
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Comprobar la lógica antes de usarla
+        run: python -m unittest test_registrar -v
+
+      - name: Consultar y anotar
+        run: python registrar.py
+
+      - name: Publicar
+        run: |
+          git config user.name  "registrador-de-tasas"
+          git config user.email "registrador@users.noreply.github.com"
+          git add tasas.json historico/
+          if git diff --cached --quiet; then
+            echo "Nada cambió; no se publica commit vacío."
+            exit 0
+          fi
+          git commit -m "tasas: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          # Otra ejecución puede haber publicado mientras tanto: se reintenta
+          # una vez sobre lo último en vez de fallar.
+          git push || (git pull --rebase --autostash && git push)
