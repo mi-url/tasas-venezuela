@@ -1,25 +1,25 @@
 {
-  "actualizado": "2026-07-31T14:14:35+00:00",
+  "actualizado": "2026-07-31T14:18:17+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "850.69000000",
+    "ves_por_usdt": "851.37680000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "853.59900000",
-    "dispersion_pct": 0.1352,
-    "obtenido": "2026-07-31T14:14:35+00:00"
+    "descartado_publicidad": "853.84000000",
+    "dispersion_pct": 0.354,
+    "obtenido": "2026-07-31T14:18:17+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "746.62970000",
     "fuente": "dolarapi",
     "fecha_valor": "2026-07-31",
-    "obtenido": "2026-07-31T14:14:35+00:00",
+    "obtenido": "2026-07-31T14:18:17+00:00",
     "contrastada": true
   },
   "ves_por_eur_bcv": {
     "valor": "858.98253725",
     "fuente": "dolarapi",
     "fecha_valor": "2026-07-31",
-    "obtenido": "2026-07-31T14:14:35+00:00"
+    "obtenido": "2026-07-31T14:18:17+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,6 +33,6 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-07-30",
-    "obtenido": "2026-07-31T14:14:35+00:00"
+    "obtenido": "2026-07-31T14:18:17+00:00"
   }
 }
