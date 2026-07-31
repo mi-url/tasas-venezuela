@@ -196,6 +196,30 @@ def internacionales() -> dict:
     }
 
 
+def criptomonedas() -> dict:
+    """Bitcoin y USDT contra el dólar.
+
+    USDT vale casi exactamente un dólar, pero *casi* no es *exactamente*: si se
+    da por supuesto que vale 1, cada operación en USDT arrastra un error
+    pequeño que se acumula. Se pregunta y se guarda como cualquier otra tasa.
+    """
+    crudo = json.loads(_pedir(
+        "https://api.coingecko.com/api/v3/simple/price"
+        "?ids=bitcoin,tether&vs_currencies=usd"
+    ))
+    salida = {}
+    for ident, codigo in (("bitcoin", "BTC"), ("tether", "USDT")):
+        precio = (crudo.get(ident) or {}).get("usd")
+        if precio:
+            # Se guarda en la misma unidad que todo lo demás: cuántas unidades
+            # de esa moneda hacen un dólar. Un bitcoin a 63.670 dólares son
+            # 0,00001570 bitcoins por dólar.
+            salida[codigo] = f"{1 / float(precio):.12f}"
+    if not salida:
+        raise FuenteCaida("coingecko no trajo ningún precio")
+    return {"por_usd": salida, "fuente": "coingecko"}
+
+
 # ---------------------------------------------------------------------------
 # CUÁNDO TOCA MIRAR EL BCV
 # ---------------------------------------------------------------------------
@@ -328,6 +352,16 @@ def main() -> int:
                 salida["internacionales"] = previas
     elif previas:
         salida["internacionales"] = previas
+
+    # --- Cripto: cada media hora, el bitcoin se mueve --------------------
+    try:
+        salida["criptomonedas"] = criptomonedas() | {
+            "obtenido": ahora.isoformat(timespec="seconds")
+        }
+    except FuenteCaida as e:
+        fallos.append(f"cripto: {e}")
+        if anterior.get("criptomonedas"):
+            salida["criptomonedas"] = anterior["criptomonedas"]
 
     if fallos:
         salida["fallos"] = fallos

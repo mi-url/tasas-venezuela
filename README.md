@@ -15,6 +15,10 @@ por mes con una línea por consulta.
 | `ves_por_eur_bcv` | El euro oficial, que muchos comercios usan | igual que el dólar |
 | `ves_por_cny_bcv`, `..._try_bcv`, `..._rub_bcv` | Yuan, lira y rublo oficiales | `bcv.org.ve` |
 | `internacionales` | Divisas estándar contra el dólar | Banco Central Europeo, vía `frankfurter.app` |
+| `criptomonedas` | Bitcoin y USDT contra el dólar | CoinGecko |
+
+USDT vale *casi* un dólar, y *casi* no es *exactamente*: darlo por supuesto arrastra un error pequeño en
+cada operación que acaba sumando. Se pregunta y se guarda como cualquier otra tasa.
 
 **Cada clave dice en qué unidad está.** `ves_por_usd` son bolívares por un dólar, no al revés. Puede
 parecer pedante hasta que se mezclan las dos: confundirlas es lo que hace que un sistema registre una
