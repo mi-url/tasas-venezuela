@@ -1,12 +1,12 @@
 {
-  "actualizado": "2026-08-01T06:00:18+00:00",
+  "actualizado": "2026-08-01T07:19:35+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "849.35400000",
+    "ves_por_usdt": "849.17420000",
     "fuente": "binance-p2p",
     "muestras": 5,
     "descartado_publicidad": "850.00000000",
-    "dispersion_pct": 0.0623,
-    "obtenido": "2026-08-01T06:00:18+00:00"
+    "dispersion_pct": 0.0589,
+    "obtenido": "2026-08-01T07:19:35+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "746.62970000",
@@ -19,7 +19,7 @@
     "valor": "858.98253725",
     "fuente": "dolarapi",
     "fecha_valor": "2026-07-31",
-    "obtenido": "2026-08-01T06:00:18+00:00"
+    "obtenido": "2026-08-01T07:19:35+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,17 +33,14 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-07-31",
-    "obtenido": "2026-08-01T04:37:31+00:00"
+    "obtenido": "2026-08-01T07:19:35+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000015878561",
+      "BTC": "0.000015860428",
       "USDT": "1.000894799951"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-08-01T06:00:18+00:00"
-  },
-  "fallos": [
-    "internacionales: https://api.frankfurter.app/latest?base=USD&symbols=EUR,BRL,MXN,CAD,GBP,CHF,JPY no respondió: The read operation timed out"
-  ]
+    "obtenido": "2026-08-01T07:19:35+00:00"
+  }
 }
