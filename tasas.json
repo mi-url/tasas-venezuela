@@ -1,49 +1,46 @@
 {
-  "actualizado": "2026-08-04T13:08:53+00:00",
+  "actualizado": "2026-08-04T14:16:19+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "844.66400000",
+    "ves_por_usdt": "844.92480000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "845.00000000",
-    "dispersion_pct": 0.0592,
-    "obtenido": "2026-08-04T13:08:53+00:00"
+    "descartado_publicidad": "845.31000000",
+    "dispersion_pct": 0.0445,
+    "obtenido": "2026-08-04T14:16:19+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "752.09430000",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-04",
-    "obtenido": "2026-08-04T12:12:05+00:00",
+    "obtenido": "2026-08-04T14:16:19+00:00",
     "contrastada": null
   },
   "ves_por_eur_bcv": {
     "valor": "865.17919894",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-04",
-    "obtenido": "2026-08-04T13:08:53+00:00"
+    "obtenido": "2026-08-04T14:16:19+00:00"
   },
   "internacionales": {
     "por_usd": {
-      "BRL": "5.06750000",
-      "CAD": "1.40280000",
-      "CHF": "0.80798000",
-      "EUR": "0.86693000",
-      "GBP": "0.74238000",
-      "JPY": "156.68000000",
-      "MXN": "17.32070000"
+      "BRL": "5.08060000",
+      "CAD": "1.40610000",
+      "CHF": "0.80929000",
+      "EUR": "0.86843000",
+      "GBP": "0.74372000",
+      "JPY": "157.41000000",
+      "MXN": "17.28810000"
     },
     "fuente": "frankfurter-bce",
-    "fecha_valor": "2026-08-03",
-    "obtenido": "2026-08-04T12:12:05+00:00"
+    "fecha_valor": "2026-08-04",
+    "obtenido": "2026-08-04T14:16:19+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000015644800",
-      "USDT": "1.000897805331"
+      "BTC": "0.000015691197",
+      "USDT": "1.000879773321"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-08-04T13:08:53+00:00"
-  },
-  "fallos": [
-    "internacionales: https://api.frankfurter.app/latest?base=USD&symbols=EUR,BRL,MXN,CAD,GBP,CHF,JPY respondió 522"
-  ]
+    "obtenido": "2026-08-04T14:16:19+00:00"
+  }
 }
