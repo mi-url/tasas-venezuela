@@ -8,9 +8,16 @@ name: Registrar tasas
 # GitHub puede retrasar estas ejecuciones unos minutos cuando está cargado. Da
 # igual: esto es el historiador, no la fuente de la verdad del momento. La app
 # sabe consultar directo si hace falta.
+#
+# **Los minutos son 7 y 37, no 0 y 30, a propósito.** En punto y a y media es
+# cuando arranca medio GitHub a la vez, y cuando no hay máquinas libres el
+# trabajo no llega ni a empezar: se queda esperando un cuarto de hora y se
+# cancela solo. El 2026-08-06 pasó cinco veces seguidas y dejó el registro sin
+# actualizar 7,7 horas — tiempo en el que la paralela se movió un 1,1%. Correr
+# unos minutos desplazado esquiva ese pico sin cambiar nada más.
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "7,37 * * * *"
   workflow_dispatch: {}
 
 permissions:
