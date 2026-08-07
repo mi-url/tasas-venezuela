@@ -1,28 +1,28 @@
 name: Registrar tasas
 
-# Cada media hora. Es el ritmo al que se mueve el precio del USDT en Binance,
-# y el que ya se usaba antes. El BCV NO se consulta en cada pasada: el propio
-# script decide cuándo tocarlo, porque publica una vez al día y machacarlo 48
-# veces sería abusivo además de inútil.
+# **Cada cuarto de hora.** Lo manda la tasa de la calle: el precio del USDT en
+# Binance se mueve todo el día, y con media hora de hueco un cambio de moneda
+# se registra con un número que ya no es. Al BCV NO se le pregunta en cada
+# pasada — eso lo decide el propio script, que sabe que publica una vez al día
+# entre las 4 y las 10 de la noche y que a las 5 de la mañana toca repescar si
+# faltó.
 #
-# GitHub puede retrasar estas ejecuciones unos minutos cuando está cargado. Da
-# igual: esto es el historiador, no la fuente de la verdad del momento. La app
-# sabe consultar directo si hace falta.
+# **Y los minutos no son 0, 15, 30, 45 a propósito.** En punto y a los cuartos
+# es cuando arranca medio GitHub a la vez; si no quedan máquinas libres el
+# trabajo no llega ni a empezar. El 2026-08-06 pasó cinco veces seguidas.
 #
-# **Los minutos son 7 y 37, no 0 y 30, a propósito.** En punto y a y media es
-# cuando arranca medio GitHub a la vez, y cuando no hay máquinas libres el
-# trabajo no llega ni a empezar: se queda esperando un cuarto de hora y se
-# cancela solo. El 2026-08-06 pasó cinco veces seguidas y dejó el registro sin
-# actualizar 7,7 horas — tiempo en el que la paralela se movió un 1,1%. Correr
-# unos minutos desplazado esquiva ese pico sin cambiar nada más.
+# Con este ritmo, una pasada perdida cuesta quince minutos de retraso en vez de
+# media hora, y hacen falta muchas seguidas para que se note.
 on:
   schedule:
-    - cron: "7,37 * * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
+# Un solo registrador a la vez. Si una pasada se alarga, la siguiente espera en
+# vez de pelearse con ella por el mismo archivo.
 concurrency:
   group: registrar
   cancel-in-progress: false
@@ -31,6 +31,20 @@ jobs:
   registrar:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
+    # **Una pasada que se pierde no es una avería, y no puede avisar como si lo
+    # fuera.** La mayoría de los fallos de aquí no son del programa: GitHub se
+    # queda sin máquinas libres, el trabajo ni siquiera arranca, y aun así el
+    # dueño del repositorio recibe un correo. Cinco correos en una tarde por
+    # algo que se arregla solo en quince minutos enseñan a no leerlos, y
+    # entonces el día que llegue uno de verdad tampoco se lee.
+    #
+    # La alarma vive donde se miran las cifras: **la app avisa en su pantalla de
+    # inicio en cuanto la tasa se queda vieja**, venga el retraso de donde
+    # venga. Y lo que sí es un error del programa lo caza el paso de pruebas de
+    # aquí abajo, antes de tocar ninguna fuente.
+    continue-on-error: true
+
     steps:
       - uses: actions/checkout@v4
 

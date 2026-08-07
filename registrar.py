@@ -225,31 +225,54 @@ def criptomonedas() -> dict:
 # ---------------------------------------------------------------------------
 
 
-def toca_mirar_bcv(anterior: dict, ahora: datetime) -> bool:
-    """El BCV publica una vez al día. Preguntarle 48 veces sería abusivo.
+# La ventana en la que el BCV publica, en hora de Caracas. Antonio, que lleva
+# años operando con ella: **entre las 4 y las 10 de la noche, sin saber cuándo**.
+VENTANA_BCV = range(16, 22)
 
-    - Si ya tenemos la tasa con fecha de valor de mañana o de hoy publicada
-      dentro de la ventana, **no se pregunta más hasta el día siguiente**.
-    - Entre las 15:00 y las 21:00 de Caracas se mira cada vez (cada 30 min):
-      es la ventana en la que publican, ampliada, porque no siempre cumplen.
-    - Fuera de esa ventana, sólo en horas pares, por si publican a deshora.
+# Y la repesca de la mañana siguiente. Si a las 5 am todavía no tenemos la tasa
+# del día anterior, es que publicaron tarde o que fallamos: se mira otra vez.
+HORA_DE_REPESCA = 5
+
+
+def toca_mirar_bcv(anterior: dict, ahora: datetime) -> bool:
+    """El BCV publica una vez al día. Preguntarle en cada pasada sería abusivo.
+
+    Tres reglas, y ninguna es un horario inventado:
+
+    - **En cuanto tenemos una tasa más nueva que hoy, no se pregunta más.**
+      Publican por adelantado, así que esa tasa ya es la de mañana.
+    - **Entre las 4 y las 10 de la noche de Caracas se mira siempre**: es la
+      ventana en la que publican, y no cumplen hora fija dentro de ella.
+    - **A las 5 de la mañana se repesca**, pero sólo si de verdad falta la tasa
+      del día anterior. Es la red que recoge lo que se publicó a deshora o lo
+      que se perdió porque GitHub no nos dio máquina esa tarde.
+
+    Fuera de eso no se toca: preguntar a las 3 de la tarde no descubre nada que
+    no vaya a descubrirse a las 4.
     """
     caracas = ahora.astimezone(CARACAS)
     ya_tenemos = (anterior.get("ves_por_usd_bcv") or {}).get("fecha_valor")
 
-    # Si la tasa que tenemos ya es de mañana (publican por adelantado), listo.
+    fecha = None
     if ya_tenemos:
         try:
             fecha = datetime.strptime(ya_tenemos, "%Y-%m-%d").date()
-            if fecha > caracas.date():
-                return False
         except ValueError:
-            pass
+            fecha = None
 
-    en_ventana = 15 <= caracas.hour < 21
-    if en_ventana:
+    # Si la tasa que tenemos ya es de mañana (publican por adelantado), listo.
+    if fecha and fecha > caracas.date():
+        return False
+
+    if caracas.hour in VENTANA_BCV:
         return True
-    return caracas.hour % 2 == 0
+
+    # **La repesca de la mañana.** Sólo si falta: si la tasa que tenemos ya es
+    # de hoy, anoche publicaron y no hay nada que recoger.
+    if caracas.hour == HORA_DE_REPESCA:
+        return fecha is None or fecha < caracas.date()
+
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -379,11 +402,22 @@ def main() -> int:
 
     print(json.dumps(salida, ensure_ascii=False, indent=2))
 
-    # Se falla en voz alta: si todas las fuentes caen, GitHub avisa por correo.
-    # Ése fue el fallo de verdad del servicio anterior — murió en silencio.
+    # **Nunca se sale con error, y no es dejadez: es dónde va la alarma.**
+    #
+    # Antes se devolvía 1 cuando ninguna fuente respondía, para que GitHub
+    # mandara un correo. La idea era buena —el servicio anterior murió en
+    # silencio— pero el correo acabó llegando por lo que no era: GitHub se
+    # queda sin máquinas libres, el trabajo ni siquiera arranca, y de todas
+    # formas manda el aviso. Cinco correos en una tarde por algo que se arregla
+    # solo en quince minutos enseñan a no leer los correos, y entonces el día
+    # que llegue el bueno tampoco se lee.
+    #
+    # La alarma vive ahora **donde se miran las cifras**: la app sabe de cuándo
+    # es cada tasa y lo dice en la pantalla de inicio en cuanto se queda vieja,
+    # venga el retraso de donde venga. Aquí sólo se deja constancia en el
+    # propio archivo, en `fallos`, que es lo que se puede auditar después.
     if "ves_por_usdt_mercado" not in salida and "ves_por_usd_bcv" not in salida:
         print("NINGUNA fuente respondió", file=sys.stderr)
-        return 1
     return 0
 
 
