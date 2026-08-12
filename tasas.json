@@ -1,12 +1,12 @@
 {
-  "actualizado": "2026-08-12T09:19:13+00:00",
+  "actualizado": "2026-08-12T09:46:54+00:00",
   "ves_por_usdt_mercado": {
     "ves_por_usdt": "870.67960000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "872.30000000",
+    "descartado_publicidad": "873.00000000",
     "dispersion_pct": 0.2375,
-    "obtenido": "2026-08-12T09:19:13+00:00"
+    "obtenido": "2026-08-12T09:46:54+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "764.34860000",
@@ -19,7 +19,7 @@
     "valor": "882.29523246",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-12",
-    "obtenido": "2026-08-12T09:19:13+00:00"
+    "obtenido": "2026-08-12T09:46:54+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,17 +33,14 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-08-11",
-    "obtenido": "2026-08-12T09:19:13+00:00"
+    "obtenido": "2026-08-12T09:46:54+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000015672753",
-      "USDT": "1.000870757559"
+      "BTC": "0.000015629640",
+      "USDT": "1.000879773321"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-08-12T09:19:13+00:00"
-  },
-  "fallos": [
-    "contraste-bcv: https://www.bcv.org.ve/ no respondió: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
-  ]
+    "obtenido": "2026-08-12T09:46:54+00:00"
+  }
 }
