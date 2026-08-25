@@ -1,25 +1,25 @@
 {
-  "actualizado": "2026-08-25T21:18:25+00:00",
+  "actualizado": "2026-08-25T21:36:21+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "936.02000000",
+    "ves_por_usdt": "935.44000000",
     "fuente": "binance-p2p",
     "muestras": 5,
     "descartado_publicidad": "940.00000000",
-    "dispersion_pct": 0.3739,
-    "obtenido": "2026-08-25T21:18:25+00:00"
+    "dispersion_pct": 0.4276,
+    "obtenido": "2026-08-25T21:36:21+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "785.06930000",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-25",
-    "obtenido": "2026-08-25T21:18:25+00:00",
+    "obtenido": "2026-08-25T21:36:21+00:00",
     "contrastada": null
   },
   "ves_por_eur_bcv": {
     "valor": "916.02670993",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-25",
-    "obtenido": "2026-08-25T21:18:25+00:00"
+    "obtenido": "2026-08-25T21:36:21+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -37,10 +37,10 @@
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000012771718",
-      "USDT": "1.000201040409"
+      "BTC": "0.000012748273",
+      "USDT": "1.000145021028"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-08-25T21:18:25+00:00"
+    "obtenido": "2026-08-25T21:36:21+00:00"
   }
 }
