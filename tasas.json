@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-08-25T09:39:49+00:00",
+  "actualizado": "2026-08-25T10:03:15+00:00",
   "ves_por_usdt_mercado": {
     "ves_por_usdt": "927.53000000",
     "fuente": "binance-p2p",
@@ -19,7 +19,7 @@
     "valor": "916.02670993",
     "fuente": "dolarapi",
     "fecha_valor": "2026-08-25",
-    "obtenido": "2026-08-25T09:39:49+00:00"
+    "obtenido": "2026-08-25T10:03:15+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,14 +33,17 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-08-24",
-    "obtenido": "2026-08-25T09:39:49+00:00"
+    "obtenido": "2026-08-25T10:03:15+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000012526462",
-      "USDT": "1.000211044530"
+      "BTC": "0.000012651822",
+      "USDT": "1.000224050187"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-08-25T09:39:49+00:00"
-  }
+    "obtenido": "2026-08-25T10:03:15+00:00"
+  },
+  "fallos": [
+    "mercado: https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search no respondió: <urlopen error [Errno 104] Connection reset by peer>"
+  ]
 }
