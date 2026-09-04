@@ -1,25 +1,25 @@
 {
-  "actualizado": "2026-09-04T08:55:43+00:00",
+  "actualizado": "2026-09-04T09:23:51+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "971.14880000",
+    "ves_por_usdt": "971.03680000",
     "fuente": "binance-p2p",
     "muestras": 5,
     "descartado_publicidad": "972.00000000",
-    "dispersion_pct": 0.1029,
-    "obtenido": "2026-09-04T08:55:43+00:00"
+    "dispersion_pct": 0.0926,
+    "obtenido": "2026-09-04T09:23:51+00:00"
   },
   "ves_por_usd_bcv": {
-    "ves_por_usd": "804.81090000",
+    "ves_por_usd": "807.38620000",
     "fuente": "dolarapi",
-    "fecha_valor": "2026-09-03",
-    "obtenido": "2026-09-04T01:58:17+00:00",
+    "fecha_valor": "2026-09-04",
+    "obtenido": "2026-09-04T09:23:51+00:00",
     "contrastada": null
   },
   "ves_por_eur_bcv": {
     "valor": "938.44920184",
     "fuente": "dolarapi",
     "fecha_valor": "2026-09-04",
-    "obtenido": "2026-09-04T08:55:43+00:00"
+    "obtenido": "2026-09-04T09:23:51+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,14 +33,17 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-09-03",
-    "obtenido": "2026-09-04T08:55:43+00:00"
+    "obtenido": "2026-09-04T09:23:51+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000012321189",
-      "USDT": "1.000113012770"
+      "BTC": "0.000012346898",
+      "USDT": "1.000100010001"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-09-04T08:55:43+00:00"
-  }
+    "obtenido": "2026-09-04T09:23:51+00:00"
+  },
+  "fallos": [
+    "contraste-bcv: https://www.bcv.org.ve/ no respondió: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+  ]
 }
