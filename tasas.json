@@ -1,12 +1,12 @@
 {
-  "actualizado": "2026-09-29T05:56:53+00:00",
+  "actualizado": "2026-09-29T06:39:21+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "960.91940000",
+    "ves_por_usdt": "960.39040000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "963.00000000",
-    "dispersion_pct": 0.0624,
-    "obtenido": "2026-09-29T05:56:53+00:00"
+    "descartado_publicidad": "961.10000000",
+    "dispersion_pct": 0.1033,
+    "obtenido": "2026-09-29T06:39:21+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "857.00580000",
@@ -19,7 +19,7 @@
     "valor": "974.71473336",
     "fuente": "dolarapi",
     "fecha_valor": "2026-09-29",
-    "obtenido": "2026-09-29T05:56:53+00:00"
+    "obtenido": "2026-09-29T06:39:21+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -33,7 +33,7 @@
     },
     "fuente": "frankfurter-bce",
     "fecha_valor": "2026-09-28",
-    "obtenido": "2026-09-29T05:56:53+00:00"
+    "obtenido": "2026-09-29T06:39:21+00:00"
   },
   "criptomonedas": {
     "por_usd": {
@@ -42,5 +42,8 @@
     },
     "fuente": "coingecko",
     "obtenido": "2026-09-29T05:56:53+00:00"
-  }
+  },
+  "fallos": [
+    "cripto: https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,tether&vs_currencies=usd respondió 403"
+  ]
 }
