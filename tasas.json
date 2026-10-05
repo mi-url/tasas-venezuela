@@ -1,46 +1,49 @@
 {
-  "actualizado": "2026-10-05T14:26:52+00:00",
+  "actualizado": "2026-10-05T21:36:22+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "978.19000000",
+    "ves_por_usdt": "982.90100000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "979.00000000",
-    "dispersion_pct": 0.0511,
-    "obtenido": "2026-10-05T14:26:52+00:00"
+    "descartado_publicidad": "985.00000000",
+    "dispersion_pct": 0.0514,
+    "obtenido": "2026-10-05T21:36:22+00:00"
   },
   "ves_por_usd_bcv": {
-    "ves_por_usd": "866.56120000",
+    "ves_por_usd": "871.36890000",
     "fuente": "dolarapi",
-    "fecha_valor": "2026-10-02",
-    "obtenido": "2026-10-05T00:14:20+00:00",
+    "fecha_valor": "2026-10-05",
+    "obtenido": "2026-10-05T21:36:22+00:00",
     "contrastada": null
   },
   "ves_por_eur_bcv": {
     "valor": "981.17880877",
     "fuente": "dolarapi",
     "fecha_valor": "2026-10-05",
-    "obtenido": "2026-10-05T14:26:52+00:00"
+    "obtenido": "2026-10-05T21:36:22+00:00"
   },
   "internacionales": {
     "por_usd": {
-      "BRL": "5.22140000",
-      "CAD": "1.42400000",
-      "CHF": "0.82664000",
-      "EUR": "0.89087000",
-      "GBP": "0.75753000",
-      "JPY": "157.67000000",
-      "MXN": "18.33500000"
+      "BRL": "4.98470000",
+      "CAD": "1.42530000",
+      "CHF": "0.83104000",
+      "EUR": "0.89254000",
+      "GBP": "0.75616000",
+      "JPY": "158.23000000",
+      "MXN": "18.14980000"
     },
     "fuente": "frankfurter-bce",
-    "fecha_valor": "2026-10-02",
-    "obtenido": "2026-10-05T14:26:52+00:00"
+    "fecha_valor": "2026-10-05",
+    "obtenido": "2026-10-05T21:36:22+00:00"
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000011581312",
-      "USDT": "1.000199039609"
+      "BTC": "0.000011645782",
+      "USDT": "1.000033001089"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-05T14:26:52+00:00"
-  }
+    "obtenido": "2026-10-05T21:36:22+00:00"
+  },
+  "fallos": [
+    "contraste-bcv: https://www.bcv.org.ve/ no respondió: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+  ]
 }
