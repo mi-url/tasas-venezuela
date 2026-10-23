@@ -1,25 +1,25 @@
 {
-  "actualizado": "2026-10-23T20:37:55+00:00",
+  "actualizado": "2026-10-23T23:34:44+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1000.86000000",
+    "ves_por_usdt": "1003.00000000",
     "fuente": "binance-p2p",
     "muestras": 5,
-    "descartado_publicidad": "1009.80800000",
-    "dispersion_pct": 0.3697,
-    "obtenido": "2026-10-23T20:37:55+00:00"
+    "descartado_publicidad": "1009.72000000",
+    "dispersion_pct": 0.1496,
+    "obtenido": "2026-10-23T23:34:44+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "886.22710000",
     "fuente": "dolarapi",
     "fecha_valor": "2026-10-23",
-    "obtenido": "2026-10-23T20:37:55+00:00",
+    "obtenido": "2026-10-23T23:34:44+00:00",
     "contrastada": null
   },
   "ves_por_eur_bcv": {
     "valor": "993.08836371",
     "fuente": "dolarapi",
     "fecha_valor": "2026-10-23",
-    "obtenido": "2026-10-23T20:37:55+00:00"
+    "obtenido": "2026-10-23T23:34:44+00:00"
   },
   "internacionales": {
     "por_usd": {
@@ -37,13 +37,10 @@
   },
   "criptomonedas": {
     "por_usd": {
-      "BTC": "0.000012299064",
-      "USDT": "1.000846716322"
+      "BTC": "0.000012367666",
+      "USDT": "1.000854729939"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-23T20:37:55+00:00"
-  },
-  "fallos": [
-    "contraste-bcv: https://www.bcv.org.ve/ no respondió: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
-  ]
+    "obtenido": "2026-10-23T23:34:44+00:00"
+  }
 }
