@@ -1,21 +1,21 @@
 name: Registrar tasas
 
-# **Cada cuarto de hora.** Lo manda la tasa de la calle: el precio del USDT en
-# Binance se mueve todo el día, y con media hora de hueco un cambio de moneda
-# se registra con un número que ya no es. Al BCV NO se le pregunta en cada
-# pasada — eso lo decide el propio script, que sabe que publica una vez al día
-# entre las 4 y las 10 de la noche y que a las 5 de la mañana toca repescar si
-# faltó.
+# **Cada media hora**, como lo pidió Antonio el 2026-10-25: «Vamos a consultar la
+# tasa BCB cada media hora después de las 4 de la tarde… Y luego la tasa Binance
+# la podemos leer cada media hora». Al BCV no se le pregunta en cada pasada: eso
+# lo decide el propio script, que lo mira desde las 3:30 de la tarde de Caracas
+# hasta que aparece la publicación nueva, y una vez por la mañana.
 #
-# **Y los minutos no son 0, 15, 30, 45 a propósito.** En punto y a los cuartos
-# es cuando arranca medio GitHub a la vez; si no quedan máquinas libres el
-# trabajo no llega ni a empezar. El 2026-08-06 pasó cinco veces seguidas.
+# **Y los minutos no son 0 y 30 a propósito.** En punto y a la media es cuando
+# arranca medio GitHub a la vez; si no quedan máquinas libres el trabajo no llega
+# ni a empezar. El 2026-08-06 pasó cinco veces seguidas.
 #
-# Con este ritmo, una pasada perdida cuesta quince minutos de retraso en vez de
-# media hora, y hacen falta muchas seguidas para que se note.
+# Cuesta cero: en un repositorio público, las máquinas normales de GitHub no se
+# cobran. Y es poca carga: unas 48 pasadas de medio minuto al día, y nada se queda
+# encendido esperando.
 on:
   schedule:
-    - cron: "7,22,37,52 * * * *"
+    - cron: "17,47 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -30,23 +30,31 @@ concurrency:
 jobs:
   registrar:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # El script se pone un tope de tres minutos y medio para consultar; esto le
+    # deja margen para instalar Python, correr las pruebas y publicar.
+    timeout-minutes: 8
 
     # **Una pasada que se pierde no es una avería, y no puede avisar como si lo
     # fuera.** La mayoría de los fallos de aquí no son del programa: GitHub se
     # queda sin máquinas libres, el trabajo ni siquiera arranca, y aun así el
-    # dueño del repositorio recibe un correo. Cinco correos en una tarde por
-    # algo que se arregla solo en quince minutos enseñan a no leerlos, y
-    # entonces el día que llegue uno de verdad tampoco se lee.
+    # dueño del repositorio recibe un correo. Muchos correos por algo que se
+    # arregla solo enseñan a no leerlos, y entonces el día que llegue uno de
+    # verdad tampoco se lee.
     #
-    # La alarma vive donde se miran las cifras: **la app avisa en su pantalla de
-    # inicio en cuanto la tasa se queda vieja**, venga el retraso de donde
-    # venga. Y lo que sí es un error del programa lo caza el paso de pruebas de
-    # aquí abajo, antes de tocar ninguna fuente.
+    # La alarma vive donde se miran las cifras: **la app dice de cuándo es cada
+    # tasa y avisa en cuanto se queda vieja**, venga el retraso de donde venga. Y
+    # lo que sí es un error del programa lo caza el paso de pruebas de aquí
+    # abajo, antes de tocar ninguna fuente.
     continue-on-error: true
 
     steps:
+      # **Lo último de main, no lo de cuando se disparó.** Una pasada que espera
+      # en la cola sacaría por defecto el commit del momento en que la
+      # dispararon; si la anterior publicó mientras tanto, partiría de un
+      # `tasas.json` viejo y chocaría al publicar.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
