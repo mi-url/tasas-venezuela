@@ -29,7 +29,12 @@ concurrency:
 
 jobs:
   registrar:
-    runs-on: ubuntu-latest
+    # **La máquina, con su versión escrita.** Con `ubuntu-latest` GitHub cambia el
+    # sistema por debajo el día que él decide (desde el 2026-10-19 lo está pasando
+    # a Ubuntu 26), y el registrador corre sin nadie mirándolo. Con la versión
+    # escrita, cambiarla es un PR que se prueba antes; y la 26.04 es la que tiene
+    # más años de soporte por delante.
+    runs-on: ubuntu-26.04
     # El script se pone un tope de tres minutos y medio para consultar; esto le
     # deja margen para instalar Python, correr las pruebas y publicar.
     timeout-minutes: 8
@@ -52,11 +57,11 @@ jobs:
       # en la cola sacaría por defecto el commit del momento en que la
       # dispararon; si la anterior publicó mientras tanto, partiría de un
       # `tasas.json` viejo y chocaría al publicar.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: main
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
