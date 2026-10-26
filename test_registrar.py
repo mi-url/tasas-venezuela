@@ -119,12 +119,43 @@ class LaPaginaDelBCV(SinTope):
         self.assertEqual(leido["ves_por_usd"], "1234.56789012")
         self.assertEqual(leido["ves_por_eur"], "1400.00000001")
 
+    def test_una_cifra_con_punto_decimal_no_se_lee(self):
+        # Hallazgo 3 de la revisión: quitarle «los puntos de miles» a 887.30200000 daba 88730200000.
+        with self.assertRaises(FuenteCaida):
+            registrar.leer_pagina_del_bcv(self.html.replace("887,30200000", "887.30200000"))
+        with self.assertRaises(FuenteCaida):
+            registrar.leer_pagina_del_bcv(self.html.replace("994,03555758", "994.03555758"))
+
+    def test_una_cifra_con_mas_de_ocho_decimales_sale_entera(self):
+        # Inventada a propósito: el BCV publica ocho, y si un día publica nueve no se recorta ninguno.
+        leido = registrar.leer_pagina_del_bcv(self.html.replace("887,30200000", "887,302000009"))
+        self.assertEqual(leido["ves_por_usd"], "887.302000009")
+
+
+def estado_del_bcv(fecha, usd, eur, *, visto, no_estaba, consultado, visto_por="bcv.org.ve", fuente="bcv.org.ve"):
+    """Lo que se sabía del BCV, en la forma de trabajo del registrador: lo común y cada moneda con sus marcas."""
+    marcas = {
+        "fecha_valor": fecha,
+        "publicado_visto": texto(visto) if visto else None,
+        "no_estaba_a_las": texto(no_estaba) if no_estaba else None,
+        "visto_por": visto_por,
+        "obtenido": texto(visto) if visto else None,
+    }
+    return {"fecha_valor": fecha, "fuente": fuente, "consultado": texto(consultado) if consultado else None,
+            "usd": {"cifra": usd, **marcas}, "eur": {"cifra": eur, **marcas}}
+
+
+def leida(fecha, usd, eur, fuente="bcv.org.ve"):
+    """Lo que trae una lectura de la página o de dolarapi."""
+    return {"ves_por_usd": usd, "ves_por_eur": eur, "fecha_valor": fecha, "fuente": fuente}
+
 
 class CuandoSeMiraElBCV(SinTope):
     """La regla de Antonio: cada media hora desde la tarde, hasta que la página da la nueva."""
 
     def antes(self, visto, consultado, visto_por="bcv.org.ve"):
-        return {"publicado_visto": texto(visto), "consultado": texto(consultado), "visto_por": visto_por}
+        return estado_del_bcv("2026-10-23", "886.22710000", "993.08836371", visto=visto, no_estaba=None,
+                              consultado=consultado, visto_por=visto_por)
 
     def test_la_primera_vez_se_mira_siempre(self):
         self.assertTrue(registrar.toca_mirar_bcv({}, en_caracas(26, 11)))
@@ -147,6 +178,11 @@ class CuandoSeMiraElBCV(SinTope):
         antes = self.antes(en_caracas(23, 16, 47), en_caracas(23, 16, 47))
         self.assertFalse(registrar.toca_mirar_bcv(antes, en_caracas(23, 17, 17)))
         self.assertFalse(registrar.toca_mirar_bcv(antes, en_caracas(23, 21, 47)))
+
+    def test_basta_con_que_la_pagina_diera_una_correccion_de_una_moneda(self):
+        antes = self.antes(en_caracas(22, 16, 47), en_caracas(23, 16, 47))
+        antes["eur"] = dict(antes["eur"], publicado_visto=texto(en_caracas(23, 16, 47)))
+        self.assertFalse(registrar.toca_mirar_bcv(antes, en_caracas(23, 17, 17)))
 
     def test_por_la_noche_un_vistazo_mas_por_si_la_corrigio(self):
         antes = self.antes(en_caracas(23, 16, 47), en_caracas(23, 16, 47))
@@ -176,63 +212,93 @@ class CuandoSeMiraElBCV(SinTope):
 
 
 class DesdeCuandoRige(SinTope):
-    vieja = {"ves_por_usd": "886.22710000", "ves_por_eur": "993.08836371", "fecha_valor": "2026-10-23",
-             "fuente": "bcv.org.ve", "publicado_visto": texto(en_caracas(22, 16, 47)),
-             "no_estaba_a_las": texto(en_caracas(22, 16, 17)), "visto_por": "bcv.org.ve",
-             "consultado": texto(en_caracas(23, 16, 17))}
-    nueva = {"ves_por_usd": "887.30200000", "ves_por_eur": "994.03555758", "fecha_valor": "2026-10-27",
-             "fuente": "bcv.org.ve"}
+    vieja = estado_del_bcv("2026-10-23", "886.22710000", "993.08836371", visto=en_caracas(22, 16, 47),
+                           no_estaba=en_caracas(22, 16, 17), consultado=en_caracas(23, 16, 17))
+    de_la_vieja = leida("2026-10-23", "886.22710000", "993.08836371")
+    nueva = leida("2026-10-27", "887.30200000", "994.03555758")
 
     def test_una_publicacion_nueva_rige_desde_que_se_vio(self):
         bcv = registrar.anotar_bcv(self.nueva, self.vieja, en_caracas(23, 16, 47))
-        self.assertEqual(bcv["publicado_visto"], texto(en_caracas(23, 16, 47)))
-        self.assertEqual(bcv["no_estaba_a_las"], texto(en_caracas(23, 16, 17)))
-        self.assertEqual(bcv["visto_por"], "bcv.org.ve")
+        for moneda in ("usd", "eur"):
+            self.assertEqual(bcv[moneda]["publicado_visto"], texto(en_caracas(23, 16, 47)))
+            self.assertEqual(bcv[moneda]["no_estaba_a_las"], texto(en_caracas(23, 16, 17)))
+            self.assertEqual(bcv[moneda]["visto_por"], "bcv.org.ve")
 
     def test_la_misma_publicacion_conserva_su_momento(self):
         ya = registrar.anotar_bcv(self.nueva, self.vieja, en_caracas(23, 16, 47))
         otra_vez = registrar.anotar_bcv(self.nueva, ya, en_caracas(24, 7, 47))
-        self.assertEqual(otra_vez["publicado_visto"], texto(en_caracas(23, 16, 47)))
-        self.assertEqual(otra_vez["no_estaba_a_las"], texto(en_caracas(23, 16, 17)))
+        self.assertEqual(otra_vez["usd"]["publicado_visto"], texto(en_caracas(23, 16, 47)))
+        self.assertEqual(otra_vez["usd"]["no_estaba_a_las"], texto(en_caracas(23, 16, 17)))
+        self.assertEqual(otra_vez["usd"]["obtenido"], texto(en_caracas(23, 16, 47)))
         self.assertEqual(otra_vez["consultado"], texto(en_caracas(24, 7, 47)))
 
     def test_una_correccion_sin_cambiar_la_fecha_es_nueva(self):
-        corregida = dict(self.vieja, ves_por_usd="886.30000000")
+        corregida = dict(self.de_la_vieja, ves_por_usd="886.30000000")
         bcv = registrar.anotar_bcv(corregida, self.vieja, en_caracas(23, 18, 17))
-        self.assertEqual(bcv["publicado_visto"], texto(en_caracas(23, 18, 17)))
+        self.assertEqual(bcv["usd"]["publicado_visto"], texto(en_caracas(23, 18, 17)))
+
+    def test_una_correccion_solo_del_euro_no_mueve_el_dolar(self):
+        # Hallazgo 2 de la revisión: el dólar no cambió, y decir que «no estaba» a las 4:17 sería falso.
+        corregida = dict(self.de_la_vieja, ves_por_eur="993.50000000")
+        bcv = registrar.anotar_bcv(corregida, self.vieja, en_caracas(23, 18, 17))
+        self.assertEqual(bcv["eur"]["publicado_visto"], texto(en_caracas(23, 18, 17)))
+        self.assertEqual(bcv["eur"]["no_estaba_a_las"], texto(en_caracas(23, 16, 17)))
+        self.assertEqual(bcv["usd"], self.vieja["usd"])
+        bloques = registrar.bloques_del_bcv(bcv)
+        self.assertEqual(bloques["ves_por_usd_bcv"]["publicado_visto"], texto(en_caracas(22, 16, 47)))
+        self.assertEqual(bloques["ves_por_usd_bcv"]["no_estaba_a_las"], texto(en_caracas(22, 16, 17)))
+        self.assertEqual(bloques["ves_por_eur_bcv"]["publicado_visto"], texto(en_caracas(23, 18, 17)))
 
     def test_una_fecha_valor_anterior_se_rechaza(self):
         ya = registrar.anotar_bcv(self.nueva, self.vieja, en_caracas(23, 16, 47))
         with self.assertRaises(FuenteCaida):
-            registrar.anotar_bcv(self.vieja, ya, en_caracas(24, 16, 17))
+            registrar.anotar_bcv(self.de_la_vieja, ya, en_caracas(24, 16, 17))
 
     def test_dolarapi_con_la_misma_publicacion_no_trae_nada(self):
         # Caso A: no mueve `consultado`, así que el hueco de cuando no estaba sigue siendo verdad.
-        mismo = dict(self.vieja, fuente="dolarapi")
+        mismo = dict(self.de_la_vieja, fuente="dolarapi")
         self.assertIsNone(registrar.anotar_bcv(mismo, self.vieja, en_caracas(23, 16, 47)))
 
     def test_dolarapi_no_pisa_una_correccion_de_la_pagina(self):
         # Caso D: la página corrigió con la misma fecha; dolarapi sigue con la cifra sin corregir.
-        corregida = registrar.anotar_bcv(dict(self.vieja, ves_por_usd="886.30000000"), self.vieja,
+        corregida = registrar.anotar_bcv(dict(self.de_la_vieja, ves_por_usd="886.30000000"), self.vieja,
                                          en_caracas(23, 18, 17))
-        sin_corregir = dict(self.vieja, fuente="dolarapi")
+        sin_corregir = dict(self.de_la_vieja, fuente="dolarapi")
         self.assertIsNone(registrar.anotar_bcv(sin_corregir, corregida, en_caracas(23, 19, 17)))
 
     def test_dolarapi_con_una_publicacion_nueva_queda_marcado_hasta_la_siguiente(self):
         # Caso B: la vio primero dolarapi; la página la confirma después y la marca no se pierde.
         de_dolarapi = registrar.anotar_bcv(dict(self.nueva, fuente="dolarapi"), self.vieja, en_caracas(24, 7, 47))
-        self.assertEqual(de_dolarapi["visto_por"], "dolarapi")
+        self.assertEqual(de_dolarapi["usd"]["visto_por"], "dolarapi")
         self.assertEqual(de_dolarapi["consultado"], self.vieja["consultado"])
         confirmada = registrar.anotar_bcv(self.nueva, de_dolarapi, en_caracas(24, 16, 17))
-        self.assertEqual(confirmada["visto_por"], "dolarapi")
-        self.assertEqual(confirmada["publicado_visto"], texto(en_caracas(24, 7, 47)))
+        self.assertEqual(confirmada["usd"]["visto_por"], "dolarapi")
+        self.assertEqual(confirmada["usd"]["publicado_visto"], texto(en_caracas(24, 7, 47)))
         self.assertTrue(registrar.bloques_del_bcv(confirmada)["ves_por_usd_bcv"]["respaldo"])
+
+    def test_obtenido_es_el_momento_de_la_lectura_que_trajo_la_cifra(self):
+        # Hallazgo 7: con el respaldo, `obtenido` era la última lectura de la página, anterior a cuando se vio.
+        de_dolarapi = registrar.anotar_bcv(dict(self.nueva, fuente="dolarapi"), self.vieja, en_caracas(24, 7, 47))
+        bloque = registrar.bloques_del_bcv(de_dolarapi)["ves_por_usd_bcv"]
+        self.assertEqual(bloque["obtenido"], texto(en_caracas(24, 7, 47)))
+        self.assertEqual(bloque["consultado"], texto(en_caracas(23, 16, 17)))
+        # Y volver a leer la misma cifra no la mueve: no fue esa lectura la que la trajo.
+        confirmada = registrar.anotar_bcv(self.nueva, de_dolarapi, en_caracas(24, 16, 17))
+        self.assertEqual(registrar.bloques_del_bcv(confirmada)["ves_por_usd_bcv"]["obtenido"], texto(en_caracas(24, 7, 47)))
 
     def test_sin_fecha_valor_no_se_anota(self):
         # Caso F.
         with self.assertRaises(FuenteCaida):
             registrar.anotar_bcv(dict(self.nueva, fecha_valor=None, fuente="dolarapi"), self.vieja,
                                  en_caracas(24, 7, 47))
+
+    def test_lo_que_publico_la_version_de_antes_se_lee_por_moneda(self):
+        de_antes = json.loads(respuesta("tasas-de-la-version-anterior.json"))
+        bcv = registrar.bcv_anterior(de_antes)
+        self.assertEqual(bcv["usd"]["cifra"], de_antes["ves_por_usd_bcv"]["ves_por_usd"])
+        self.assertEqual(bcv["eur"]["cifra"], de_antes["ves_por_eur_bcv"]["valor"])
+        self.assertEqual(bcv["eur"]["fecha_valor"], de_antes["ves_por_eur_bcv"]["fecha_valor"])
+        self.assertIsNone(bcv["consultado"])
 
     def test_los_bloques_conservan_lo_que_lee_la_app_anterior(self):
         bcv = registrar.anotar_bcv(self.nueva, self.vieja, en_caracas(23, 16, 47))
@@ -349,6 +415,12 @@ class NadaPasaPorComaFlotante(SinTope):
         with mock.patch.object(registrar, "_pedir", fuentes):
             cripto = registrar.criptomonedas()
         self.assertEqual(cripto["usd_por"]["USDT"], cifra)
+
+    def test_lo_calculado_aqui_si_se_redondea_y_lo_de_una_fuente_no(self):
+        self.assertEqual(registrar._texto(Decimal("1003.0505")), "1003.05050000")
+        self.assertEqual(registrar._texto(Decimal("0.1000000000000000055511151231257827")),
+                         "0.1000000000000000055511151231257827")
+        self.assertEqual(registrar._redondeada(Decimal(1) / Decimal(3), 4), "0.3333")
 
     def test_las_internacionales_tal_cual(self):
         with mock.patch.object(registrar, "_pedir", FuentesDeMentira()):

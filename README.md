@@ -23,7 +23,9 @@ cada operación que acaba sumando. Se pregunta y se guarda como cualquier otra t
 parecer pedante hasta que se mezclan las dos: confundirlas es lo que hace que un sistema registre una
 ganancia de noventa mil dólares sobre diez.
 
-**Ninguna cifra pasa por un número de coma flotante.** Cada una se guarda tal como la dio su fuente.
+**Ninguna cifra pasa por un número de coma flotante.** Cada una se guarda tal como la dio su fuente, con
+todos sus decimales aunque traiga más de ocho. Sólo se redondea lo que se calcula aquí: la dispersión de
+Binance y las inversas de las criptomonedas.
 
 Y cada dato viene con **de dónde salió y cuándo**. Una tasa sin fecha es una tasa en la que no se puede
 confiar.
@@ -34,7 +36,10 @@ El BCV publica hacia las 4:30 de la tarde, a veces antes y a veces hacia las 5, 
 desde ese momento hasta que publique la siguiente**. La del viernes rige el fin de semana y el lunes, y un
 feriado bancario no publica: sigue la última.
 
-Por eso cada publicación lleva, además de su `fecha_valor`:
+Por eso cada publicación lleva, además de su `fecha_valor`, estas marcas. **Cada moneda lleva las suyas**:
+el BCV a veces corrige sólo el euro, y entonces cambian las del euro y las del dólar se quedan como
+estaban. Decir que el dólar «no estaba» a una hora en que ya estaba sería falso, y quien lo lee movería
+desde cuándo rige.
 
 | Campo | Qué es |
 |---|---|
@@ -42,6 +47,7 @@ Por eso cada publicación lleva, además de su `fecha_valor`:
 | `no_estaba_a_las` | La última vez que **la página** enseñaba la de antes. Entre las dos queda acotado cuándo publicó el BCV |
 | `visto_por` | Quién la vio primero: `bcv.org.ve` o, si la página estaba caída, `dolarapi` |
 | `respaldo` | `true` cuando la vio primero dolarapi: su `publicado_visto` es cuándo la dio dolarapi, que llega tarde, no cuándo publicó el BCV. Se mantiene hasta la publicación siguiente |
+| `obtenido` | El momento de la lectura que trajo esa cifra. Volver a leer la misma no lo mueve |
 | `consultado` | La última vez que se leyó la página. Una lectura de dolarapi no lo mueve |
 
 `no_estaba_a_las` vacío quiere decir que no se sabe desde cuándo estaba. Pasa con la primera publicación
@@ -49,6 +55,10 @@ que recogió esta versión, porque la anterior no guardaba cuándo miraba. Si la
 rato, el hueco entre `no_estaba_a_las` y `publicado_visto` es más largo, y es verdad: es lo que se sabe.
 
 La `fecha_valor` no dice desde cuándo rige: sólo sirve para reconocer que salió una publicación nueva.
+
+**Una cifra del BCV sin su coma decimal no se lee.** La página las escribe a la venezolana, `887,30200000`,
+con punto de miles y coma decimal. Si un día la escribiera con punto decimal, quitarle los puntos de miles
+la multiplicaría por cien millones; por eso una cifra que no tenga esa forma cuenta como página caída.
 
 ## Las decisiones que no son obvias
 
