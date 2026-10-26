@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-10-26T15:11:36+00:00",
+  "actualizado": "2026-10-26T20:29:19+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1003.35100000",
+    "ves_por_usdt": "1003.29400000",
     "muestras": 10,
-    "minimo": "1003.26000000",
-    "maximo": "1004.50000000",
-    "dispersion_pct": "0.1236",
+    "minimo": "1003.00000000",
+    "maximo": "1003.71000000",
+    "dispersion_pct": "0.0708",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "100394",
+    "monto_bs": "100335",
     "compra": {
-      "ves_por_usdt": "1006.99750000",
+      "ves_por_usdt": "1006.93900000",
       "muestras": 10,
-      "minimo": "1005.99900000",
-      "maximo": "1007.30000000",
-      "dispersion_pct": "0.1292"
+      "minimo": "1006.00000000",
+      "maximo": "1007.00000000",
+      "dispersion_pct": "0.0993"
     },
-    "obtenido": "2026-10-26T15:11:36+00:00"
+    "obtenido": "2026-10-26T20:29:19+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "887.30200000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-26T13:46:26+00:00",
+    "consultado": "2026-10-26T20:29:19+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-26T13:46:26+00:00",
+    "consultado": "2026-10-26T20:29:19+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -43,29 +43,29 @@
   },
   "internacionales": {
     "por_usd": {
-      "BRL": "5.04650000",
-      "CAD": "1.39950000",
-      "CHF": "0.82435000",
-      "EUR": "0.89342000",
-      "GBP": "0.74804000",
-      "JPY": "156.80000000",
-      "MXN": "18.78230000"
+      "BRL": "5.58840000",
+      "CAD": "1.40280000",
+      "CHF": "0.82615000",
+      "EUR": "0.89381000",
+      "GBP": "0.74920000",
+      "JPY": "157.45000000",
+      "MXN": "18.61550000"
     },
     "fuente": "frankfurter-bce",
-    "fecha_valor": "2026-10-23",
-    "obtenido": "2026-10-26T13:46:26+00:00",
-    "consultado": "2026-10-26T13:46:26+00:00"
+    "fecha_valor": "2026-10-26",
+    "obtenido": "2026-10-26T20:29:19+00:00",
+    "consultado": "2026-10-26T20:29:19+00:00"
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "80376",
-      "USDT": "0.998834"
+      "BTC": "79768",
+      "USDT": "0.998603"
     },
     "por_usd": {
-      "BTC": "0.000012441525",
-      "USDT": "1.001167361143"
+      "BTC": "0.000012536355",
+      "USDT": "1.001398954339"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-26T15:11:36+00:00"
+    "obtenido": "2026-10-26T20:29:19+00:00"
   }
 }
