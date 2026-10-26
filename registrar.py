@@ -171,10 +171,23 @@ def _cifra(valor) -> Decimal:
 
 
 def _texto(d: Decimal, decimales: int = 8) -> str:
-    """Una cifra con un número fijo de decimales, como ya la publicaba esto.
+    """Una cifra de una fuente, **tal cual**, con al menos `decimales` decimales, como ya la publicaba esto.
 
     Las tasas del BCV traen ocho decimales y las de Binance tres: escritas así
-    sólo se rellenan con ceros, no se redondean.
+    sólo se rellenan con ceros. **Si trae más, se escriben todos**: recortarla
+    sería publicar una cifra que la fuente no dio.
+    """
+    if -d.as_tuple().exponent > decimales:
+        return format(d, "f")
+    return f"{d:.{decimales}f}"
+
+
+def _redondeada(d: Decimal, decimales: int) -> str:
+    """Una cifra **calculada aquí** (una dispersión, una inversa), redondeada a `decimales`.
+
+    No es una cifra de ninguna fuente: una división no tiene escritura decimal
+    finita, y hay que cortarla en algún sitio. Lo que publica una fuente va por
+    `_texto`, que no redondea nunca.
     """
     return f"{d:.{decimales}f}"
 
@@ -271,6 +284,11 @@ LA_PAGINA = "bcv.org.ve"
 EL_RESPALDO = "dolarapi"
 
 _PATRON_TASA_BCV = r'id="{}".{{0,700}}?<strong[^>]*>\s*([\d.,]+)\s*</strong>'
+# **Una cifra del BCV, escrita a la venezolana**: puntos de miles opcionales y coma decimal. Si el BCV la
+# escribiera con punto decimal, quitarle «los puntos de miles» la multiplicaría por cien millones (887.30200000 →
+# 88730200000): una cifra que no tenga esta forma no se lee. La app lee la página con el mismo patrón
+# (`app2/lib/core/tasas/traer.dart`, `readBcvPage`).
+_CIFRA_VENEZOLANA = re.compile(r"^\d{1,3}(\.\d{3})*,\d+$|^\d+,\d+$")
 _PATRON_FECHA_VALOR = r"Fecha\s+Valor:\s*<span[^>]*content=\"(\d{4}-\d{2}-\d{2})T"
 
 
@@ -280,7 +298,8 @@ def leer_pagina_del_bcv(html: str) -> dict:
     Los tres salen del mismo vistazo, así que siempre son de la misma
     publicación. El BCV escribe las cifras al estilo venezolano —`887,30200000`,
     punto de miles y coma decimal— y aquí se guardan con punto decimal y sin
-    tocar un dígito.
+    tocar un dígito. **Una cifra sin la coma decimal de siempre no se lee**
+    (`_CIFRA_VENEZOLANA`).
 
     Si falta cualquiera de los tres, no se devuelve nada: una publicación a
     medias es peor que ninguna.
@@ -289,8 +308,10 @@ def leer_pagina_del_bcv(html: str) -> dict:
         m = re.search(_PATRON_TASA_BCV.format(codigo), html, re.S)
         if not m:
             raise FuenteCaida(f"no se encontró el {codigo} en la página del BCV")
-        cruda = m.group(1).strip().replace(".", "").replace(",", ".")
-        return _texto(_cifra(cruda))
+        escrita = m.group(1).strip()
+        if not _CIFRA_VENEZOLANA.match(escrita):
+            raise FuenteCaida(f"el BCV escribe «{escrita}», sin la coma decimal de siempre")
+        return _texto(_cifra(escrita.replace(".", "").replace(",", ".")))
 
     m = re.search(_PATRON_FECHA_VALOR, html, re.S)
     if not m:
@@ -356,14 +377,23 @@ VISTAZO_DE_LA_NOCHE = 22
 VISTAZO_DE_LA_MANANA = range(7, 10)
 
 
+# **Las dos monedas del BCV**: cómo se llama cada una en lo que se lee de la página o de dolarapi, y su bloque y su
+# cifra en lo que se publica. Cada una lleva su propio «desde cuándo»: el BCV a veces corrige sólo una.
+MONEDAS_DEL_BCV = {
+    "usd": {"leida": "ves_por_usd", "bloque": "ves_por_usd_bcv", "cifra": "ves_por_usd"},
+    "eur": {"leida": "ves_por_eur", "bloque": "ves_por_eur_bcv", "cifra": "valor"},
+}
+
+
 def toca_mirar_bcv(anterior: dict, ahora: datetime) -> bool:
     """Si en esta pasada toca mirar la página del BCV.
 
     - **Desde las 3:30 de la tarde, en cada pasada**, hasta que **la página**
-      enseña una publicación nueva. Que la diera dolarapi no cuenta: llega tarde
-      y no dice cuándo publicó el BCV, así que se sigue mirando la página. Los
-      días sin publicación —fines de semana y feriados— se mira hasta medianoche
-      sin encontrar nada, y no pasa nada: la última sigue rigiendo.
+      enseña algo nuevo (una publicación o una corrección). Que lo diera
+      dolarapi no cuenta: llega tarde y no dice cuándo publicó el BCV, así que
+      se sigue mirando la página. Los días sin publicación —fines de semana y
+      feriados— se mira hasta medianoche sin encontrar nada, y no pasa nada: la
+      última sigue rigiendo.
     - **Una vez más por la noche**, ya vista la de la tarde, por si la corrigió.
     - **Una vez por la mañana**, entre las 7 y las 10.
     - **Siempre, si nunca se ha leído la página.**
@@ -378,8 +408,12 @@ def toca_mirar_bcv(anterior: dict, ahora: datetime) -> bool:
     hoy = caracas.replace(minute=0, second=0, microsecond=0)
     tarde = hoy.replace(hour=EMPIEZA_LA_TARDE[0], minute=EMPIEZA_LA_TARDE[1])
     if caracas >= tarde:
-        visto = _momento(anterior.get("publicado_visto"))
-        ya_la_dio_la_pagina = anterior.get("visto_por") == LA_PAGINA and visto is not None and visto >= tarde
+        ya_la_dio_la_pagina = False
+        for moneda in MONEDAS_DEL_BCV:
+            estado = anterior.get(moneda) or {}
+            visto = _momento(estado.get("publicado_visto"))
+            if estado.get("visto_por") == LA_PAGINA and visto is not None and visto >= tarde:
+                ya_la_dio_la_pagina = True
         if not ya_la_dio_la_pagina:
             return True
         noche = hoy.replace(hour=VISTAZO_DE_LA_NOCHE)
@@ -390,11 +424,11 @@ def toca_mirar_bcv(anterior: dict, ahora: datetime) -> bool:
 
 
 def anotar_bcv(leido: dict, anterior: dict, ahora: datetime) -> dict | None:
-    """La publicación del BCV, con desde cuándo rige. `None` si no trae nada nuevo que valga.
+    """La publicación del BCV, con desde cuándo rige cada moneda. `None` si no trae nada nuevo que valga.
 
-    **Una lectura de la página manda.** Si trae una publicación nueva —cambia su
-    fecha valor o cualquiera de sus dos cifras, porque el BCV a veces corrige—,
-    se apunta:
+    **Una lectura de la página manda.** Si trae algo nuevo para una moneda
+    —cambia la fecha valor o su cifra, porque el BCV a veces corrige—, se
+    apunta **para esa moneda**:
 
     - `publicado_visto`: este momento, **desde cuándo rige** con la regla de
       Antonio;
@@ -402,10 +436,15 @@ def anotar_bcv(leido: dict, anterior: dict, ahora: datetime) -> dict | None:
       las dos queda acotado cuándo publicó el BCV: media hora como mucho si
       GitHub corre a su hora, y si una pasada se retrasó o la página estuvo
       caída, el hueco se ve;
-    - `visto_por`: quién la vio primero.
+    - `visto_por`: quién la vio primero;
+    - `obtenido`: el momento de la lectura que trajo esa cifra.
 
-    Si no es nueva, se conservan esas tres y sólo se apunta que se volvió a
-    mirar (`consultado`).
+    **Cada moneda, lo suyo.** Si el BCV corrige sólo el euro, el dólar conserva
+    sus cuatro marcas: decir que el dólar «no estaba» a una hora en que ya
+    estaba es falso, y quien lo lee movería desde cuándo rige.
+
+    Si una moneda no trae nada nuevo, conserva sus marcas, y sólo se apunta que
+    se volvió a mirar (`consultado`).
 
     **Una lectura de dolarapi sólo cuenta si trae una publicación de fecha
     posterior a la que ya se tenía.** Con la misma fecha no trae nada: o es la
@@ -418,23 +457,34 @@ def anotar_bcv(leido: dict, anterior: dict, ahora: datetime) -> dict | None:
     """
     momento = _ahora_texto(ahora)
     de_la_pagina = leido.get("fuente") == LA_PAGINA
-    antes, fecha = anterior.get("fecha_valor"), leido.get("fecha_valor")
+    fecha = leido.get("fecha_valor")
     if not fecha:
         raise FuenteCaida(f"{leido.get('fuente')} no dice la fecha valor")
+    fechas_de_antes = [(anterior.get(m) or {}).get("fecha_valor") for m in MONEDAS_DEL_BCV]
+    antes = max((f for f in fechas_de_antes if f), default=None)
     if antes and fecha < antes:
         raise FuenteCaida(f"{leido.get('fuente')} trae la publicación del {fecha}, anterior a la del {antes} que ya se tenía")
     if not de_la_pagina and antes and fecha <= antes:
         return None
-    nueva = any(leido.get(k) != anterior.get(k) for k in ("fecha_valor", "ves_por_usd", "ves_por_eur"))
-    salida = dict(leido)
-    salida["consultado"] = momento if de_la_pagina else anterior.get("consultado")
-    if nueva:
-        salida["publicado_visto"] = momento
-        salida["no_estaba_a_las"] = anterior.get("consultado")
-        salida["visto_por"] = leido["fuente"]
-    else:
-        for clave in ("publicado_visto", "no_estaba_a_las", "visto_por"):
-            salida[clave] = anterior.get(clave)
+    salida: dict = {
+        "fecha_valor": fecha,
+        "fuente": leido["fuente"],
+        "consultado": momento if de_la_pagina else anterior.get("consultado"),
+    }
+    for moneda, nombres in MONEDAS_DEL_BCV.items():
+        previa = anterior.get(moneda) or {}
+        cifra = leido[nombres["leida"]]
+        if fecha != previa.get("fecha_valor") or cifra != previa.get("cifra"):
+            salida[moneda] = {
+                "cifra": cifra,
+                "fecha_valor": fecha,
+                "publicado_visto": momento,
+                "no_estaba_a_las": anterior.get("consultado"),
+                "visto_por": leido["fuente"],
+                "obtenido": momento,
+            }
+        else:
+            salida[moneda] = {**previa, "cifra": cifra, "fecha_valor": fecha}
     return salida
 
 
@@ -443,48 +493,57 @@ def bloques_del_bcv(bcv: dict) -> dict:
 
     `ves_por_usd_bcv` y `ves_por_eur_bcv` conservan **todos los campos que ya
     tenían** y con el mismo significado, porque la app anterior los lee
-    (`ves_por_usd`, `valor`, `fuente`, `fecha_valor`, `contrastada`, `obtenido`).
-    Lo nuevo se añade al lado: `publicado_visto`, `no_estaba_a_las`,
-    `visto_por`, `consultado` y `respaldo`.
+    (`ves_por_usd`, `valor`, `fuente`, `fecha_valor`, `contrastada`; `obtenido`
+    lo escribe pero ya no lo lee nadie). Lo nuevo se añade al lado:
+    `publicado_visto`, `no_estaba_a_las`, `visto_por`, `consultado` y
+    `respaldo`, **cada bloque con los de su moneda**.
     """
-    comun = {
-        "fuente": bcv["fuente"],
-        "fecha_valor": bcv.get("fecha_valor"),
-        "obtenido": bcv.get("consultado"),
-        "consultado": bcv.get("consultado"),
-        "publicado_visto": bcv.get("publicado_visto"),
-        "no_estaba_a_las": bcv.get("no_estaba_a_las"),
-        "visto_por": bcv.get("visto_por"),
-        "respaldo": bcv.get("visto_por") != LA_PAGINA,
-    }
+    def bloque(moneda: str) -> dict:
+        estado = bcv.get(moneda) or {}
+        return {
+            "fuente": bcv["fuente"],
+            "fecha_valor": estado.get("fecha_valor"),
+            "obtenido": estado.get("obtenido"),
+            "consultado": bcv.get("consultado"),
+            "publicado_visto": estado.get("publicado_visto"),
+            "no_estaba_a_las": estado.get("no_estaba_a_las"),
+            "visto_por": estado.get("visto_por"),
+            "respaldo": estado.get("visto_por") != LA_PAGINA,
+        }
+
     return {
         # `contrastada` era la comparación entre dolarapi y la página del BCV.
         # Ahora la fuente es la página misma: no hay nada que contrastar, y se
         # deja vacío en vez de afirmar un contraste que no se hizo.
-        "ves_por_usd_bcv": {"ves_por_usd": bcv["ves_por_usd"], **comun, "contrastada": None},
-        "ves_por_eur_bcv": {"valor": bcv["ves_por_eur"], **comun},
+        "ves_por_usd_bcv": {"ves_por_usd": bcv["usd"]["cifra"], **bloque("usd"), "contrastada": None},
+        "ves_por_eur_bcv": {"valor": bcv["eur"]["cifra"], **bloque("eur")},
     }
 
 
 def bcv_anterior(anterior: dict) -> dict:
-    """Lo último que se sabía del BCV, en la forma de trabajo de aquí.
+    """Lo último que se sabía del BCV, en la forma de trabajo de aquí: lo común y cada moneda con lo suyo.
 
-    Junta los dos bloques publicados en uno solo. Si lo anterior lo escribió la
-    versión vieja de este registrador —sin `consultado`—, sale sin esa marca, y
-    entonces la primera pasada mira la página y empieza a contar desde ahí.
+    Si lo anterior lo escribió la versión vieja de este registrador —sin
+    `consultado`—, sale sin esa marca, y entonces la primera pasada mira la
+    página y empieza a contar desde ahí. Si lo escribió la versión de antes de
+    separar las monedas, cada bloque ya trae sus marcas y se leen igual.
     """
-    dolar = anterior.get("ves_por_usd_bcv") or {}
-    euro = anterior.get("ves_por_eur_bcv") or {}
-    return {
-        "ves_por_usd": dolar.get("ves_por_usd"),
-        "ves_por_eur": euro.get("valor"),
-        "fecha_valor": dolar.get("fecha_valor"),
-        "fuente": dolar.get("fuente"),
-        "consultado": dolar.get("consultado"),
-        "publicado_visto": dolar.get("publicado_visto"),
-        "no_estaba_a_las": dolar.get("no_estaba_a_las"),
-        "visto_por": dolar.get("visto_por"),
+    salida: dict = {
+        "fecha_valor": (anterior.get("ves_por_usd_bcv") or {}).get("fecha_valor"),
+        "fuente": (anterior.get("ves_por_usd_bcv") or {}).get("fuente"),
+        "consultado": (anterior.get("ves_por_usd_bcv") or {}).get("consultado"),
     }
+    for moneda, nombres in MONEDAS_DEL_BCV.items():
+        bloque = anterior.get(nombres["bloque"]) or {}
+        salida[moneda] = {
+            "cifra": bloque.get(nombres["cifra"]),
+            "fecha_valor": bloque.get("fecha_valor"),
+            "publicado_visto": bloque.get("publicado_visto"),
+            "no_estaba_a_las": bloque.get("no_estaba_a_las"),
+            "visto_por": bloque.get("visto_por"),
+            "obtenido": bloque.get("obtenido"),
+        }
+    return salida
 
 
 # ---------------------------------------------------------------------------
@@ -534,7 +593,7 @@ def resumen_de_binance(precios: list[Decimal]) -> dict:
         "muestras": len(precios),
         "minimo": _texto(min(precios)),
         "maximo": _texto(max(precios)),
-        "dispersion_pct": _texto((max(precios) - min(precios)) / mediana * 100, 4),
+        "dispersion_pct": _redondeada((max(precios) - min(precios)) / mediana * 100, 4),
     }
 
 
@@ -658,7 +717,7 @@ def criptomonedas() -> dict:
         raise FuenteCaida("coingecko no trajo ningún precio")
     with localcontext() as ctx:
         ctx.prec = 40
-        por_usd = {k: _texto(Decimal(1) / v, 12) for k, v in usd_por.items()}
+        por_usd = {k: _redondeada(Decimal(1) / v, 12) for k, v in usd_por.items()}
     return {"usd_por": {k: str(v) for k, v in usd_por.items()}, "por_usd": por_usd, "fuente": "coingecko"}
 
 
