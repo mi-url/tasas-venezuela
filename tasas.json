@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-10-27T03:17:09+00:00",
+  "actualizado": "2026-10-27T03:47:09+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "999.02500000",
+    "ves_por_usdt": "999.26350000",
     "muestras": 10,
     "minimo": "998.70000000",
-    "maximo": "1001.50000000",
-    "dispersion_pct": "0.2803",
+    "maximo": "999.72000000",
+    "dispersion_pct": "0.1021",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "99906",
+    "monto_bs": "99902",
     "compra": {
-      "ves_por_usdt": "1002.50850000",
+      "ves_por_usdt": "1002.70000000",
       "muestras": 10,
-      "minimo": "1002.00000000",
+      "minimo": "1000.00000000",
       "maximo": "1003.00000000",
-      "dispersion_pct": "0.0997"
+      "dispersion_pct": "0.2992"
     },
-    "obtenido": "2026-10-27T03:17:09+00:00"
+    "obtenido": "2026-10-27T03:47:09+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "887.30200000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-27T03:17:09+00:00",
+    "consultado": "2026-10-27T03:47:09+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-27T03:17:09+00:00",
+    "consultado": "2026-10-27T03:47:09+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "79590",
-      "USDT": "0.9987"
+      "BTC": "79808",
+      "USDT": "0.998729"
     },
     "por_usd": {
-      "BTC": "0.000012564393",
-      "USDT": "1.001301692200"
+      "BTC": "0.000012530072",
+      "USDT": "1.001272617497"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-27T03:17:09+00:00"
+    "obtenido": "2026-10-27T03:47:09+00:00"
   }
 }
