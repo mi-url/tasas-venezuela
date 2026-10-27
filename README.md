@@ -6,6 +6,8 @@ el histórico, que es lo que ninguna fuente pública ofrece.
 **Lo último está en [`tasas.json`](tasas.json).** El histórico, en [`historico/`](historico), un archivo
 por mes con una línea por consulta. Y **el BCV de cada día desde 2020**, en
 [`historico/bcv-oficial.jsonl`](historico/bcv-oficial.jsonl): ver [La serie oficial del BCV](#la-serie-oficial-del-bcv-desde-2020).
+Y **el mercado de cada día de antes del registrador**, recopilado una vez de cuatro fuentes públicas, en
+[`historico/mercado-anterior.jsonl`](historico/mercado-anterior.jsonl): ver [El mercado de antes](#el-mercado-de-antes-de-2020-a-julio-de-2026).
 
 ## Qué publica
 
@@ -139,6 +141,80 @@ del de cada media hora. Después, [`contrastar_bcv_oficial.py`](contrastar_bcv_o
 resumen de la ejecución cuántas fechas coinciden con lo que apuntó el registrador y con frankfurter, que
 lee los mismos .xls desde el 2021-10-04. Con el .xls del tercer trimestre de 2026 coinciden las 29 fechas
 valor que tiene el registrador (del 31 de julio al 9 de septiembre) y las 49 de frankfurter, dólar y euro.
+
+## El mercado de antes, de 2020 a julio de 2026
+
+El registrador mide el mercado desde el 2026-07-31. **Lo de antes no lo midió nadie de aquí**, así que se
+recopiló **una sola vez**, el 2026-10-27, de cuatro fuentes públicas, en
+[`historico/mercado-anterior.jsonl`](historico/mercado-anterior.jsonl): **una línea por día**, del
+2020-03-30 (el primer día de la serie oficial del BCV) al 2026-07-30. **Está congelado**: ningún flujo lo
+toca. Lo armó [`compilar_mercado_anterior.py`](compilar_mercado_anterior.py), que explica cada decisión.
+
+| Campo | Qué es |
+|---|---|
+| `fecha` | El día, en Caracas |
+| `ves_por_usd` | Los bolívares de hoy por un dólar, como texto exacto |
+| `fuente` | De cuál de las cuatro es la cifra |
+| `escala_original`, `cifra_original` | Sólo si la fuente la daba en soberanos: `bolívar soberano` y la cifra tal cual |
+| `testigos` | Lo que decían ese día las otras fuentes, para comparar. No se usa para nada más |
+| `obtenido` | Cuándo se bajó la fuente |
+
+**Una cifra por día, de una sola fuente, tal cual.** Nunca se mezclan dos ni se corrige una con otra. Qué
+fuente manda se eligió midiendo cuál se parece más al mercado de este registrador. Ese mercado casa con el
+paralelo de dolarapi: el 26 de octubre de 2026, lectura a lectura, a un 0,03 %, y en el promedio de ese día y
+del siguiente, a menos de un 0,3 %.
+
+| Días | Fuente | Qué es | Días con cifra |
+|---|---|---|---|
+| 2020-03-30 a 2025-05-27 | [xjp.cl](https://xjp.cl), `Parallel_Daily_Full.csv` | El paralelo de DolarToday y EnParaleloVzla, el cierre de cada día hábil | 1.239 |
+| | si falta: [Wikipedia](https://es.wikipedia.org/wiki/Anexo:Cotizaci%C3%B3n_hist%C3%B3rica_del_bol%C3%ADvar_con_respecto_al_d%C3%B3lar) | El de Monitor Dólar, que el anexo anota a mano | 63 |
+| 2025-05-28 a 2025-10-27 | [CriptoDólar](https://criptodolar.net), «Dólar Binance» | Una foto de Binance P2P hacia las 7 de la tarde: el paralelo dejó de publicarse | 131 |
+| | si falta: Wikipedia | | 16 |
+| 2025-10-28 a 2026-07-30 | [Yadio](https://yadio.io), `hist/365` | El promedio de 24 horas de cada día (días de UTC, de 8 a 8 de la noche de Caracas) | 276 |
+
+- **1.725 días con cifra de 2.314.** De los 589 sin cifra:
+  - 538 son fines de semana de 2020 a mayo de 2025, que el paralelo no publicaba y no se rellenan con otra
+    fuente: cada lunes daría un salto que no fue del mercado;
+  - 6 son fines de semana de junio de 2025 sin foto de CriptoDólar;
+  - y 45 son días hábiles, la mayoría feriados, en que no hay cifra o la que hay es una errata.
+- **Contra el paralelo de dolarapi**, de febrero a julio de 2026, Yadio sale un 0,36 % por debajo y nunca a
+  más de un 3,6 %. CriptoDólar, un 1,84 % por encima y con 15 días a más de un 5 %: por eso sólo cubre el
+  tramo en que no hubo paralelo.
+- **Las dos costuras con el registrador no son del mercado.** El método del registrador de antes del
+  2026-10-26 salía un 1,75 % por encima de Yadio: el 2026-07-31 sube eso de golpe, y el 2026-10-26 baja otro
+  tanto al cambiar de método.
+- **2020 es aproximado en todas las fuentes.** Con la hiperinflación el paralelo se movía hasta un 10 % en
+  un día, y cada fuente lo anota a una hora: xjp.cl y Wikipedia se separan más de un 5 % en 24 días de 2020.
+- **Los soberanos se dividen entre un millón, exacto**: todo xjp.cl, que nunca aplicó la reconversión de
+  2021, y Wikipedia hasta el 2021-09-30. Lo que la fuente da como número binario (CriptoDólar, Yadio) se
+  redondea a ocho decimales, como la serie oficial del BCV.
+- **Siete cifras se quitaron**, sin corregirlas, cada una comprobada contra las demás fuentes:
+  - xjp.cl, el 2020-06-10, el 2020-11-09 y el 2020-12-15;
+  - Wikipedia, el 2025-11-21 y el 2026-06-12, erratas de tecleo;
+  - y el 2021-09-30 y el 2021-10-01, dos del Monitor Dólar de la reconversión, un 18-20 % por encima de todo
+    lo demás.
+
+  El script se niega a publicar si encuentra otra.
+- **Lo que no se lee sin dudar, no se lee.** Dos celdas de Wikipedia escriben `8 88` y `24 80`, con un
+  espacio por coma, y se quedan sin leer: ese día manda xjp.cl.
+- **Se probó y se descartó LocalBitcoins** para 2020-2021 (la tasa que se deduce de UsefulTulips): sale un
+  2-3 % por debajo de los dos paralelos.
+
+**Las fuentes no se copian aquí**, se citan: xjp.cl publica sus datos con licencia
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), como dice su portada; el anexo de Wikipedia, con
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (revisión 175956434, del 2026-10-23); Yadio
+pide citarlo con un enlace, y aquí está; CriptoDólar no declara licencia para sus cifras. De cada una se toma
+sólo la cifra de cada día.
+
+Para volver a armarlo hacen falta las cuatro fuentes tal como se bajaron, en una carpeta:
+
+```bash
+python3 compilar_mercado_anterior.py <carpeta>    # escribe historico/mercado-anterior.jsonl
+python3 -m unittest test_mercado_anterior -v      # las pruebas del archivo y de cada lector
+```
+
+Las pruebas se corren al cambiar la recopilación: el archivo está congelado, y el registrador de cada media
+hora no depende de él.
 
 ## Por qué existe esto
 
