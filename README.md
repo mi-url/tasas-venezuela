@@ -4,7 +4,8 @@ Registro público y automático de a cuánto está el bolívar. Se actualiza sol
 el histórico, que es lo que ninguna fuente pública ofrece.
 
 **Lo último está en [`tasas.json`](tasas.json).** El histórico, en [`historico/`](historico), un archivo
-por mes con una línea por consulta.
+por mes con una línea por consulta. Y **el BCV de cada día desde 2020**, en
+[`historico/bcv-oficial.jsonl`](historico/bcv-oficial.jsonl): ver [La serie oficial del BCV](#la-serie-oficial-del-bcv-desde-2020).
 
 ## Qué publica
 
@@ -25,7 +26,8 @@ ganancia de noventa mil dólares sobre diez.
 
 **Ninguna cifra pasa por un número de coma flotante.** Cada una se guarda tal como la dio su fuente, con
 todos sus decimales aunque traiga más de ocho. Sólo se redondea lo que se calcula aquí: la dispersión de
-Binance y las inversas de las criptomonedas.
+Binance y las inversas de las criptomonedas. Y lo de la serie oficial, porque el BCV guarda sus .xls con
+números del Excel: cada uno se redondea a los ocho decimales que publica, y se escribe como texto.
 
 Y cada dato viene con **de dónde salió y cuándo**. Una tasa sin fecha es una tasa en la que no se puede
 confiar.
@@ -101,6 +103,43 @@ en `fallos`; las otras se publican igual. Una pasada tiene además un tope de tr
 consultar, para que GitHub no la corte sin publicar nada. La alarma está en la app, que dice de cuándo es
 cada tasa.
 
+## La serie oficial del BCV, desde 2020
+
+El registrador apunta el BCV desde el 2026-07-31. **Lo de antes lo tiene el propio BCV**, en su serie
+«Tipo de Cambio de Referencia SMC»: un .xls por trimestre desde el primero de 2020, con una hoja por
+día. [`importar_bcv_oficial.py`](importar_bcv_oficial.py) los lee todos y escribe
+[`historico/bcv-oficial.jsonl`](historico/bcv-oficial.jsonl), **una línea por fecha valor**:
+
+| Campo | Qué es |
+|---|---|
+| `fecha_valor` | El día en que rige, como lo escribe el BCV |
+| `fecha_operacion` | El día de la hoja: el día hábil en que el BCV la sacó |
+| `ves_por_usd`, `ves_por_eur` | La venta (ASK) en bolívares de hoy, como texto exacto |
+| `escala_original` | `bolívar digital` o, hasta la fecha valor 2021-09-30, `bolívar soberano` |
+| `cifras_originales` | Sólo en soberanos: las cifras tal como las da la hoja |
+| `hora_de_la_hoja` | La hora que estampa el BCV en la hoja, en hora de Caracas. No se sabe si es la de publicación: **no dice desde cuándo rige** |
+| `fuente` | `bcv.org.ve (serie oficial)` |
+| `archivo`, `hoja` | De qué .xls y de qué hoja salió |
+| `obtenido` | Cuándo entró esa línea en la serie |
+
+- **Las cifras de antes del 2021-10-01 se dividen entre un millón.** Ese día entró el bolívar digital, un
+  millón de soberanos cada uno; la primera fecha valor en digitales es la del 2021-10-04. La división es
+  exacta: sólo se corre la coma.
+- **El BCV guarda sus cifras como números del Excel**, y publica ocho decimales: cada una se redondea a
+  ocho. En el .xls del tercer trimestre de 2026, los 4.116 números de sus hojas vuelven exactos así.
+- **Los enlaces de cada trimestre se leen de la página de la serie, no se arman**: un trimestre que el BCV
+  vuelve a subir cambia de nombre (`2_1_2c23_smc_60.xls`).
+- **Se puede volver a correr.** Lo que ya estaba no cambia ni un byte; se vuelve a leer desde el trimestre
+  de la última fecha de operación que se tiene, y entra lo nuevo. Si una fecha que ya estaba sale con otra
+  cifra, no se toca nada y se dice.
+- **Si el BCV cambia la forma de la hoja, no se publica nada**, y el error dice qué hoja y qué le falta.
+
+Lo corre a mano el flujo [`importar-bcv-oficial.yml`](.github/workflows/importar-bcv-oficial.yml), aparte
+del de cada media hora. Después, [`contrastar_bcv_oficial.py`](contrastar_bcv_oficial.py) dice en el
+resumen de la ejecución cuántas fechas coinciden con lo que apuntó el registrador y con frankfurter, que
+lee los mismos .xls desde el 2021-10-04. Con el .xls del tercer trimestre de 2026 coinciden las 29 fechas
+valor que tiene el registrador (del 31 de julio al 9 de septiembre) y las 49 de frankfurter, dólar y euro.
+
 ## Por qué existe esto
 
 Porque **ninguna fuente guarda el histórico**. Si nadie anota la tasa de cada día, el día que tu teléfono
@@ -132,4 +171,12 @@ python3 registrar.py                     # consulta y actualiza los archivos
 python3 -m unittest test_registrar -v    # las pruebas, con respuestas reales guardadas en pruebas/
 ```
 
-Sin dependencias: sólo la librería estándar de Python.
+El registrador no tiene dependencias: sólo la librería estándar de Python. La serie oficial necesita un
+lector de .xls, `xlrd`, fijado con su huella:
+
+```bash
+python3 -m pip install --require-hashes -r requisitos-serie-oficial.txt
+python3 importar_bcv_oficial.py                     # lee lo que falta de la serie y la escribe
+python3 contrastar_bcv_oficial.py                   # la compara con el registrador y con frankfurter
+python3 -m unittest test_importar_bcv_oficial -v    # sus pruebas, con el .xls real del BCV en pruebas/
+```
