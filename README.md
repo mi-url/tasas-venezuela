@@ -110,10 +110,25 @@ Y porque una sola consulta compartida es mejor que muchas: si cada app preguntar
 multiplicaríamos las llamadas por cada usuario, y el endpoint de Binance —que no es oficial— acabaría
 bloqueándonos. Leer un archivo publicado, en cambio, no tiene límite.
 
+## Quién la despierta
+
+**Un despertador, no el reloj de GitHub.** El reloj de GitHub dispara los horarios cuando puede: el
+2026-10-26 lanzó 4 pasadas de unas 39 en 19 horas, cada una entre 20 y 50 minutos tarde, y en su foro hay
+quejas iguales desde agosto de 2026. Una pasada pedida por su API, en cambio, arranca al momento.
+
+Así que un trabajo gratis de `cron-job.org` le pide a GitHub, a los 17 y a los 47 de cada hora, que corra
+este flujo (`POST /repos/mi-url/tasas-venezuela/actions/workflows/registrar.yml/dispatches`, con
+`{"ref":"main"}`). Usa una llave de grano fino que sólo sirve para lanzar tareas de este repositorio
+(«Actions: Read and write»), y vence el 2027-10-26: antes de esa fecha hay que poner una nueva.
+
+El horario de GitHub se queda en el flujo como respaldo. Una pasada de más no estorba: espera a la que está
+corriendo, y si nada cambió no publica nada.
+
 ## Cuánto cuesta
 
 Nada. Corre en GitHub Actions, en un repositorio público y con las máquinas normales de GitHub, que no se
-cobran. Son unas 48 pasadas de medio minuto al día, y nada se queda encendido esperando.
+cobran. Son unas 48 pasadas de medio minuto al día, y nada se queda encendido esperando. El despertador de
+cron-job.org también es gratis.
 
 ## Cómo se usa
 
