@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-10-27T02:49:19+00:00",
+  "actualizado": "2026-10-27T02:49:54+00:00",
   "ves_por_usdt_mercado": {
     "ves_por_usdt": "999.06000000",
     "muestras": 10,
@@ -8,22 +8,22 @@
     "dispersion_pct": "0.1301",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "99870",
+    "monto_bs": "99906",
     "compra": {
       "ves_por_usdt": "1003.00000000",
       "muestras": 10,
-      "minimo": "1002.94000000",
-      "maximo": "1003.30000000",
-      "dispersion_pct": "0.0359"
+      "minimo": "1002.79900000",
+      "maximo": "1003.20000000",
+      "dispersion_pct": "0.0400"
     },
-    "obtenido": "2026-10-27T02:49:19+00:00"
+    "obtenido": "2026-10-27T02:49:54+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "887.30200000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-27T02:49:19+00:00",
+    "consultado": "2026-10-27T02:49:54+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-27",
     "obtenido": "2026-10-26T03:10:35+00:00",
-    "consultado": "2026-10-27T02:49:19+00:00",
+    "consultado": "2026-10-27T02:49:54+00:00",
     "publicado_visto": "2026-10-26T03:10:35+00:00",
     "no_estaba_a_las": null,
     "visto_por": "bcv.org.ve",
@@ -66,6 +66,6 @@
       "USDT": "1.001286653350"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-27T02:49:19+00:00"
+    "obtenido": "2026-10-27T02:49:54+00:00"
   }
 }
