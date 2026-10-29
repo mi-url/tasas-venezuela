@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-10-29T19:47:09+00:00",
+  "actualizado": "2026-10-29T20:17:11+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1000.90250000",
+    "ves_por_usdt": "1001.91400000",
     "muestras": 10,
-    "minimo": "1000.35000000",
-    "maximo": "1004.00000000",
-    "dispersion_pct": "0.3647",
+    "minimo": "1001.90900000",
+    "maximo": "1002.10000000",
+    "dispersion_pct": "0.0191",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "100050",
+    "monto_bs": "100090",
     "compra": {
       "ves_por_usdt": "1005.00000000",
       "muestras": 10,
       "minimo": "1003.00000000",
-      "maximo": "1005.00000000",
-      "dispersion_pct": "0.1990"
+      "maximo": "1005.40000000",
+      "dispersion_pct": "0.2388"
     },
-    "obtenido": "2026-10-29T19:47:09+00:00"
+    "obtenido": "2026-10-29T20:17:11+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "888.89090000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-29",
     "obtenido": "2026-10-28T20:47:11+00:00",
-    "consultado": "2026-10-29T19:47:09+00:00",
+    "consultado": "2026-10-29T20:17:11+00:00",
     "publicado_visto": "2026-10-28T20:47:11+00:00",
     "no_estaba_a_las": "2026-10-28T20:17:15+00:00",
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-29",
     "obtenido": "2026-10-28T20:47:11+00:00",
-    "consultado": "2026-10-29T19:47:09+00:00",
+    "consultado": "2026-10-29T20:17:11+00:00",
     "publicado_visto": "2026-10-28T20:47:11+00:00",
     "no_estaba_a_las": "2026-10-28T20:17:15+00:00",
     "visto_por": "bcv.org.ve",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "80783",
-      "USDT": "0.999034"
+      "BTC": "80310",
+      "USDT": "0.999024"
     },
     "por_usd": {
-      "BTC": "0.000012378842",
-      "USDT": "1.000966934058"
+      "BTC": "0.000012451749",
+      "USDT": "1.000976953507"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-29T19:47:09+00:00"
+    "obtenido": "2026-10-29T20:17:11+00:00"
   }
 }
