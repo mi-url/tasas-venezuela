@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-10-30T19:47:14+00:00",
+  "actualizado": "2026-10-30T20:17:08+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "981.75000000",
+    "ves_por_usdt": "988.95250000",
     "muestras": 10,
-    "minimo": "981.41000000",
+    "minimo": "988.22500000",
     "maximo": "1000.00000000",
-    "dispersion_pct": "1.8936",
+    "dispersion_pct": "1.1907",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "97800",
+    "monto_bs": "98175",
     "compra": {
-      "ves_por_usdt": "989.00000000",
+      "ves_por_usdt": "999.99950000",
       "muestras": 10,
-      "minimo": "983.00000000",
-      "maximo": "989.99900000",
-      "dispersion_pct": "0.7077"
+      "minimo": "997.99900000",
+      "maximo": "1000.00000000",
+      "dispersion_pct": "0.2001"
     },
-    "obtenido": "2026-10-30T19:47:14+00:00"
+    "obtenido": "2026-10-30T20:17:08+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "889.25530000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-30",
     "obtenido": "2026-10-29T20:37:20+00:00",
-    "consultado": "2026-10-30T19:47:14+00:00",
+    "consultado": "2026-10-30T20:17:08+00:00",
     "publicado_visto": "2026-10-29T20:37:20+00:00",
     "no_estaba_a_las": "2026-10-29T20:17:11+00:00",
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-10-30",
     "obtenido": "2026-10-29T20:37:20+00:00",
-    "consultado": "2026-10-30T19:47:14+00:00",
+    "consultado": "2026-10-30T20:17:08+00:00",
     "publicado_visto": "2026-10-29T20:37:20+00:00",
     "no_estaba_a_las": "2026-10-29T20:17:11+00:00",
     "visto_por": "bcv.org.ve",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "76564",
+      "BTC": "76836",
       "USDT": "0.998993"
     },
     "por_usd": {
-      "BTC": "0.000013060969",
+      "BTC": "0.000013014733",
       "USDT": "1.001008015071"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-10-30T19:47:14+00:00"
+    "obtenido": "2026-10-30T20:17:08+00:00"
   }
 }
