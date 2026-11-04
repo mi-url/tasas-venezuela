@@ -1,22 +1,22 @@
 {
-  "actualizado": "2026-11-04T12:17:08+00:00",
+  "actualizado": "2026-11-04T12:47:14+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1005.00000000",
+    "ves_por_usdt": "1005.81550000",
     "muestras": 10,
-    "minimo": "1004.60000000",
-    "maximo": "1005.60100000",
-    "dispersion_pct": "0.0996",
+    "minimo": "1005.60000000",
+    "maximo": "1006.00000000",
+    "dispersion_pct": "0.0398",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "100400",
+    "monto_bs": "100500",
     "compra": {
-      "ves_por_usdt": "1007.97450000",
+      "ves_por_usdt": "1008.65000000",
       "muestras": 10,
       "minimo": "1006.50000000",
-      "maximo": "1009.00000000",
-      "dispersion_pct": "0.2480"
+      "maximo": "1009.70000000",
+      "dispersion_pct": "0.3173"
     },
-    "obtenido": "2026-11-04T12:17:08+00:00"
+    "obtenido": "2026-11-04T12:47:14+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "893.21730000",
@@ -58,15 +58,15 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "77987",
-      "USDT": "0.999003"
+      "BTC": "78169",
+      "USDT": "0.998998"
     },
     "por_usd": {
-      "BTC": "0.000012822650",
-      "USDT": "1.000997995001"
+      "BTC": "0.000012792795",
+      "USDT": "1.001003005011"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-11-04T12:17:08+00:00"
+    "obtenido": "2026-11-04T12:47:14+00:00"
   },
   "fallos": [
     "internacionales: https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR,BRL,MXN,CAD,GBP,CHF,JPY no respondió: The read operation timed out"
