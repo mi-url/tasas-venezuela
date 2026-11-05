@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-11-05T19:47:08+00:00",
+  "actualizado": "2026-11-05T20:17:09+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1009.40050000",
+    "ves_por_usdt": "1008.50000000",
     "muestras": 10,
-    "minimo": "1008.80000000",
+    "minimo": "1008.25900000",
     "maximo": "1012.00000000",
-    "dispersion_pct": "0.3170",
+    "dispersion_pct": "0.3709",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "100822",
+    "monto_bs": "100940",
     "compra": {
-      "ves_por_usdt": "1012.94450000",
+      "ves_por_usdt": "1012.99950000",
       "muestras": 10,
-      "minimo": "1012.00000000",
-      "maximo": "1013.42000000",
-      "dispersion_pct": "0.1402"
+      "minimo": "1012.50000000",
+      "maximo": "1013.00000000",
+      "dispersion_pct": "0.0494"
     },
-    "obtenido": "2026-11-05T19:47:08+00:00"
+    "obtenido": "2026-11-05T20:17:09+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "894.88760000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-11-05",
     "obtenido": "2026-11-04T20:47:10+00:00",
-    "consultado": "2026-11-05T19:47:08+00:00",
+    "consultado": "2026-11-05T20:17:09+00:00",
     "publicado_visto": "2026-11-04T20:47:10+00:00",
     "no_estaba_a_las": "2026-11-04T20:17:09+00:00",
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-11-05",
     "obtenido": "2026-11-04T20:47:10+00:00",
-    "consultado": "2026-11-05T19:47:08+00:00",
+    "consultado": "2026-11-05T20:17:09+00:00",
     "publicado_visto": "2026-11-04T20:47:10+00:00",
     "no_estaba_a_las": "2026-11-04T20:17:09+00:00",
     "visto_por": "bcv.org.ve",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "76300",
-      "USDT": "0.999037"
+      "BTC": "75998",
+      "USDT": "0.998963"
     },
     "por_usd": {
-      "BTC": "0.000013106160",
-      "USDT": "1.000963928263"
+      "BTC": "0.000013158241",
+      "USDT": "1.001038076485"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-11-05T19:47:08+00:00"
+    "obtenido": "2026-11-05T20:17:09+00:00"
   }
 }
