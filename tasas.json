@@ -1,22 +1,22 @@
 {
-  "actualizado": "2026-11-06T13:17:09+00:00",
+  "actualizado": "2026-11-06T13:47:10+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1010.77500000",
+    "ves_por_usdt": "1010.10000000",
     "muestras": 10,
-    "minimo": "1010.31100000",
-    "maximo": "1011.00000000",
-    "dispersion_pct": "0.0682",
+    "minimo": "1010.00100000",
+    "maximo": "1012.00000000",
+    "dispersion_pct": "0.1979",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "101000",
+    "monto_bs": "101078",
     "compra": {
-      "ves_por_usdt": "1014.84500000",
+      "ves_por_usdt": "1015.00000000",
       "muestras": 10,
-      "minimo": "1013.20000000",
-      "maximo": "1015.00000000",
-      "dispersion_pct": "0.1774"
+      "minimo": "1013.99800000",
+      "maximo": "1015.20000000",
+      "dispersion_pct": "0.1184"
     },
-    "obtenido": "2026-11-06T13:17:09+00:00"
+    "obtenido": "2026-11-06T13:47:10+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "896.12250000",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "75835",
-      "USDT": "0.999048"
+      "BTC": "75720",
+      "USDT": "0.999087"
     },
     "por_usd": {
-      "BTC": "0.000013186523",
-      "USDT": "1.000952907168"
+      "BTC": "0.000013206550",
+      "USDT": "1.000913834331"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-11-06T13:17:09+00:00"
+    "obtenido": "2026-11-06T13:47:10+00:00"
   }
 }
