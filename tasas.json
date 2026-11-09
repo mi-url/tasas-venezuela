@@ -1,29 +1,29 @@
 {
-  "actualizado": "2026-11-09T03:17:11+00:00",
+  "actualizado": "2026-11-09T03:47:08+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1032.43650000",
+    "ves_por_usdt": "1030.32650000",
     "muestras": 10,
-    "minimo": "1031.39000000",
-    "maximo": "1033.40000000",
-    "dispersion_pct": "0.1947",
+    "minimo": "1030.00000000",
+    "maximo": "1031.55000000",
+    "dispersion_pct": "0.1504",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "103220",
+    "monto_bs": "103244",
     "compra": {
-      "ves_por_usdt": "1036.99000000",
+      "ves_por_usdt": "1036.00000000",
       "muestras": 10,
       "minimo": "1035.00000000",
       "maximo": "1037.00000000",
-      "dispersion_pct": "0.1929"
+      "dispersion_pct": "0.1931"
     },
-    "obtenido": "2026-11-09T03:17:11+00:00"
+    "obtenido": "2026-11-09T03:47:08+00:00"
   },
   "ves_por_usd_bcv": {
     "ves_por_usd": "897.53830000",
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-11-09",
     "obtenido": "2026-11-06T20:47:09+00:00",
-    "consultado": "2026-11-09T03:17:11+00:00",
+    "consultado": "2026-11-09T03:47:08+00:00",
     "publicado_visto": "2026-11-06T20:47:09+00:00",
     "no_estaba_a_las": "2026-11-06T20:17:07+00:00",
     "visto_por": "bcv.org.ve",
@@ -35,7 +35,7 @@
     "fuente": "bcv.org.ve",
     "fecha_valor": "2026-11-09",
     "obtenido": "2026-11-06T20:47:09+00:00",
-    "consultado": "2026-11-09T03:17:11+00:00",
+    "consultado": "2026-11-09T03:47:08+00:00",
     "publicado_visto": "2026-11-06T20:47:09+00:00",
     "no_estaba_a_las": "2026-11-06T20:17:07+00:00",
     "visto_por": "bcv.org.ve",
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "74867",
-      "USDT": "0.999069"
+      "BTC": "75024",
+      "USDT": "0.999122"
     },
     "por_usd": {
-      "BTC": "0.000013357020",
-      "USDT": "1.000931867569"
+      "BTC": "0.000013329068",
+      "USDT": "1.000878771561"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-11-09T03:17:11+00:00"
+    "obtenido": "2026-11-09T03:47:08+00:00"
   }
 }
