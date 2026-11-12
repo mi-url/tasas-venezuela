@@ -1,43 +1,43 @@
 {
-  "actualizado": "2026-11-12T20:17:08+00:00",
+  "actualizado": "2026-11-12T20:47:08+00:00",
   "ves_por_usdt_mercado": {
-    "ves_por_usdt": "1066.05000000",
+    "ves_por_usdt": "1064.30100000",
     "muestras": 10,
-    "minimo": "1065.21000000",
+    "minimo": "1064.21100000",
     "maximo": "1069.95000000",
-    "dispersion_pct": "0.4446",
+    "dispersion_pct": "0.5392",
     "fuente": "binance-p2p",
     "metodo": "mediana de los 10 primeros anuncios que aceptan 100 dólares en bolívares",
-    "monto_bs": "106677",
+    "monto_bs": "106605",
     "compra": {
-      "ves_por_usdt": "1070.99000000",
+      "ves_por_usdt": "1069.97700000",
       "muestras": 10,
-      "minimo": "1069.00000000",
-      "maximo": "1071.99700000",
-      "dispersion_pct": "0.2798"
+      "minimo": "1068.49900000",
+      "maximo": "1070.00000000",
+      "dispersion_pct": "0.1403"
     },
-    "obtenido": "2026-11-12T20:17:08+00:00"
+    "obtenido": "2026-11-12T20:47:08+00:00"
   },
   "ves_por_usd_bcv": {
-    "ves_por_usd": "904.44850000",
+    "ves_por_usd": "911.62430000",
     "fuente": "bcv.org.ve",
-    "fecha_valor": "2026-11-12",
-    "obtenido": "2026-11-11T21:17:10+00:00",
-    "consultado": "2026-11-12T20:17:08+00:00",
-    "publicado_visto": "2026-11-11T21:17:10+00:00",
-    "no_estaba_a_las": "2026-11-11T20:17:13+00:00",
+    "fecha_valor": "2026-11-13",
+    "obtenido": "2026-11-12T20:47:08+00:00",
+    "consultado": "2026-11-12T20:47:08+00:00",
+    "publicado_visto": "2026-11-12T20:47:08+00:00",
+    "no_estaba_a_las": "2026-11-12T20:17:08+00:00",
     "visto_por": "bcv.org.ve",
     "respaldo": false,
     "contrastada": null
   },
   "ves_por_eur_bcv": {
-    "valor": "1003.49465523",
+    "valor": "1009.34130871",
     "fuente": "bcv.org.ve",
-    "fecha_valor": "2026-11-12",
-    "obtenido": "2026-11-11T21:17:10+00:00",
-    "consultado": "2026-11-12T20:17:08+00:00",
-    "publicado_visto": "2026-11-11T21:17:10+00:00",
-    "no_estaba_a_las": "2026-11-11T20:17:13+00:00",
+    "fecha_valor": "2026-11-13",
+    "obtenido": "2026-11-12T20:47:08+00:00",
+    "consultado": "2026-11-12T20:47:08+00:00",
+    "publicado_visto": "2026-11-12T20:47:08+00:00",
+    "no_estaba_a_las": "2026-11-12T20:17:08+00:00",
     "visto_por": "bcv.org.ve",
     "respaldo": false
   },
@@ -58,14 +58,14 @@
   },
   "criptomonedas": {
     "usd_por": {
-      "BTC": "71513",
-      "USDT": "0.99915"
+      "BTC": "71433",
+      "USDT": "0.999022"
     },
     "por_usd": {
-      "BTC": "0.000013983472",
-      "USDT": "1.000850723115"
+      "BTC": "0.000013999132",
+      "USDT": "1.000978957420"
     },
     "fuente": "coingecko",
-    "obtenido": "2026-11-12T20:17:08+00:00"
+    "obtenido": "2026-11-12T20:47:08+00:00"
   }
 }
